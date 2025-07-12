@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions - StackIt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .questions-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 2rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #1f2937;
+        }
+        
+        .ask-btn {
+            background: #6366f1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .ask-btn:hover {
+            background: #5147eb;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background: #f3f4f6;
+        }
+        
+        .search-bar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .question-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 50px;
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #374151;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+        
+        .question-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .question-title:hover {
+            color: #6366f1;
+        }
+        
+        .question-excerpt {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .question-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .question-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .question-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #6366f1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+        
+        .no-questions {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        
+        .no-questions h3 {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            background: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: #6366f1; padding: 1rem 0; margin-bottom: 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold;">StackIt</a>
+            <div id="userNav" style="color: white;"></div>
+        </div>
+    </nav>
+
+    <div class="questions-container">
+        <div class="header">
+            <h1>All Questions</h1>
+            <a href="ask-question.html" class="ask-btn">Ask Question</a>
+        </div>
+        
+        <div class="search-bar">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search questions..."
+            >
+        </div>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-filter="newest">Newest</button>
+            <button class="filter-btn" data-filter="votes">Most Votes</button>
+            <button class="filter-btn" data-filter="answers">Most Answers</button>
+            <button class="filter-btn" data-filter="unanswered">Unanswered</button>
+        </div>
+        
+        <div id="questionsContainer">
+            <div class="loading">Loading questions...</div>
+        </div>
+        
+        <div id="pagination" class="pagination" style="display: none;">
+            <button id="prevBtn">Previous</button>
+            <span id="pageInfo">Page 1</span>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService } from './firebase-modern.js';
+        
+        // DOM elements
+        const questionsContainer = document.getElementById('questionsContainer');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const userNav = document.getElementById('userNav');
+        const pagination = document.getElementById('pagination');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageInfo = document.getElementById('pageInfo');
+        
+        let currentFilter = 'newest';
+        let currentPage = 1;
+        let questionsPerPage = 10;
+        let allQuestions = [];
+        let filteredQuestions = [];
+        
+        // Check authentication and setup user nav
+        authService.onAuthStateChange((user) => {
+            if (user) {
+                userNav.innerHTML = `
+                    <span>Welcome, ${user.email}</span>
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
+                `;
+            } else {
+                userNav.innerHTML = `
+                    <a href="login-modern.html" style="color: white; text-decoration: none; margin-right: 1rem;">Login</a>
+                    <a href="signup.html" style="color: white; text-decoration: none;">Sign Up</a>
+                `;
+            }
+        });
+        
+        // Make logout function global
+        window.logout = async () => {
+            await authService.logoutUser();
+            window.location.href = 'index.html';
+        };
+        
+        // Load questions on page load
+        window.addEventListener('load', () => {
+            loadQuestions();
+        });
+        
+        // Filter buttons
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active filter
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                currentFilter = btn.dataset.filter;
+                currentPage = 1;
+                applyFilters();
+            });
+        });
+        
+        // Search functionality
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentPage = 1;
+                applyFilters();
+            }, 300);
+        });
+        
+        // Pagination
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayQuestions();
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayQuestions();
+            }
+        });
+        
+        async function loadQuestions() {
+            try {
+                questionsContainer.innerHTML = '<div class="loading">Loading questions...</div>';
+                
+                const result = await questionService.getQuestions(100); // Get more questions for better filtering
+                
+                if (result.success) {
+                    allQuestions = result.questions;
+                    applyFilters();
+                } else {
+                    questionsContainer.innerHTML = `
+                        <div class="no-questions">
+                            <h3>Failed to load questions</h3>
+                            <p>${result.error}</p>
+                            <button onclick="loadQuestions()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">Try Again</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                questionsContainer.innerHTML = `
+                    <div class="no-questions">
+                        <h3>Error loading questions</h3>
+                        <p>Please try again later</p>
+                        <button onclick="loadQuestions()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Make loadQuestions global for retry button
+        window.loadQuestions = loadQuestions;
+        
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            // Filter by search term
+            let filtered = allQuestions;
+            if (searchTerm) {
+                filtered = allQuestions.filter(q => 
+                    q.title.toLowerCase().includes(searchTerm) ||
+                    q.content.toLowerCase().includes(searchTerm) ||
+                    (q.tags && q.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+                );
+            }
+            
+            // Filter by type
+            switch (currentFilter) {
+                case 'newest':
+                    filtered.sort((a, b) => {
+                        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+                        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+                        return dateB - dateA;
+                    });
+                    break;
+                case 'votes':
+                    filtered.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+                    break;
+                case 'answers':
+                    filtered.sort((a, b) => (b.answers || 0) - (a.answers || 0));
+                    break;
+                case 'unanswered':
+                    filtered = filtered.filter(q => !q.answers || q.answers === 0);
+                    break;
+            }
+            
+            filteredQuestions = filtered;
+            currentPage = 1;
+            displayQuestions();
+        }
+        
+        function displayQuestions() {
+            if (filteredQuestions.length === 0) {
+                questionsContainer.innerHTML = `
+                    <div class="no-questions">
+                        <h3>No questions found</h3>
+                        <p>Try adjusting your search or filters, or be the first to ask a question!</p>
+                        <a href="ask-question.html" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: #6366f1; color: white; text-decoration: none; border-radius: 5px;">Ask a Question</a>
+                    </div>
+                `;
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            const startIndex = (currentPage - 1) * questionsPerPage;
+            const endIndex = startIndex + questionsPerPage;
+            const pageQuestions = filteredQuestions.slice(startIndex, endIndex);
+            
+            questionsContainer.innerHTML = pageQuestions.map(question => createQuestionCard(question)).join('');
+            
+            // Update pagination
+            const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+            if (totalPages > 1) {
+                pagination.style.display = 'flex';
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages;
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            } else {
+                pagination.style.display = 'none';
+            }
+        }
+        
+        function createQuestionCard(question) {
+            const createdAt = question.createdAt?.toDate ? question.createdAt.toDate() : new Date(question.createdAt);
+            const timeAgo = getTimeAgo(createdAt);
+            const authorInitial = question.authorName ? question.authorName.charAt(0).toUpperCase() : '?';
+            
+            return `
+                <div class="question-card" onclick="goToQuestion('${question.id}')">
+                    <div style="display: flex; gap: 1rem;">
+                        <div class="question-stats">
+                            <div class="stat">
+                                <div class="stat-number">${question.votes || 0}</div>
+                                <div class="stat-label">votes</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${question.answers || 0}</div>
+                                <div class="stat-label">answers</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${question.views || 0}</div>
+                                <div class="stat-label">views</div>
+                            </div>
+                        </div>
+                        
+                        <div style="flex: 1;">
+                            <h3 class="question-title">${escapeHtml(question.title)}</h3>
+                            
+                            <div class="question-excerpt">
+                                ${escapeHtml(question.content.substring(0, 200))}${question.content.length > 200 ? '...' : ''}
+                            </div>
+                            
+                            <div class="question-meta">
+                                <div class="question-tags">
+                                    ${question.tags ? question.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('') : ''}
+                                </div>
+                                
+                                <div class="question-author">
+                                    <div class="author-avatar">${authorInitial}</div>
+                                    <span>${escapeHtml(question.authorName)}</span>
+                                    <span>•</span>
+                                    <span>${timeAgo}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function goToQuestion(questionId) {
+            window.location.href = `question.html?id=${questionId}`;
+        }
+        
+        // Make goToQuestion global for onclick handlers
+        window.goToQuestion = goToQuestion;
+        
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+            return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

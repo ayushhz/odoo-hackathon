@@ -1,17 +1,44 @@
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+
 // Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+}
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
+    if (hamburger && navMenu) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+    }
 }));
+
+// Specific Login Button Handler
+const loginButton = document.querySelector('#loginBtn');
+if (loginButton) {
+    loginButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Login button clicked - navigating to login.html');
+        window.location.href = 'login.html';
+    });
+}
+
+// Specific Sign Up Button Handler
+const signupButton = document.querySelector('#signupBtn');
+if (signupButton) {
+    signupButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Sign Up button clicked - navigating to signup.html');
+        window.location.href = 'signup.html';
+    });
+}
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -65,15 +92,20 @@ document.querySelectorAll('.btn').forEach(button => {
     
     button.addEventListener('click', function(e) {
         // Handle navigation to auth pages
-        if (this.textContent.trim() === 'Login') {
+        const buttonText = this.textContent.trim();
+        
+        if (buttonText === 'Login') {
+            e.preventDefault();
             window.location.href = 'login.html';
             return;
         }
-        if (this.textContent.trim() === 'Sign Up' || this.textContent.trim() === 'Create Account') {
+        if (buttonText === 'Sign Up' || buttonText === 'Create Account' || buttonText === 'Get Started') {
+            e.preventDefault();
             window.location.href = 'signup.html';
             return;
         }
         
+        // Ripple effect for other buttons
         const ripple = document.createElement('span');
         const rect = this.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
@@ -203,3 +235,5 @@ const statsGrid = document.querySelector('.stats-grid');
 if (statsGrid) {
     statsObserver.observe(statsGrid);
 }
+
+}); // End of DOMContentLoaded

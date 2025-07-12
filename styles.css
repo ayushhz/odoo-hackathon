@@ -101,6 +101,15 @@ p {
     font-family: inherit;
 }
 
+/* Ensure anchor tags styled as buttons don't have underlines */
+a.btn {
+    text-decoration: none;
+}
+
+a.btn:hover {
+    text-decoration: none;
+}
+
 .btn-primary {
     background-color: var(--primary-color);
     color: white;

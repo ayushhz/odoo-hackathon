@@ -186,18 +186,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Login form submission
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (validateForm('loginForm')) {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
                 showNotification('Signing you in...', 'info');
                 
-                // Simulate login process
-                setTimeout(() => {
-                    showNotification('Welcome back to StackIt!', 'success');
-                    // Redirect to dashboard or home page
-                    // window.location.href = 'dashboard.html';
-                }, 1500);
+                try {
+                    const result = await window.authService.loginUser(email, password);
+                    
+                    if (result.success) {
+                        showNotification('Welcome back to StackIt!', 'success');
+                        // Store user session
+                        localStorage.setItem('user', JSON.stringify({
+                            uid: result.user.uid,
+                            email: result.user.email
+                        }));
+                        // Redirect to dashboard or home page
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        showNotification(result.error, 'error');
+                    }
+                } catch (error) {
+                    showNotification('Login failed. Please try again.', 'error');
+                    console.error('Login error:', error);
+                }
             } else {
                 showNotification('Please fill in all required fields correctly.', 'error');
             }
@@ -207,18 +225,41 @@ document.addEventListener('DOMContentLoaded', function() {
     // Signup form submission
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
+        signupForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (validateForm('signupForm')) {
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const username = document.getElementById('username').value;
+                const displayName = document.getElementById('displayName').value;
+                
                 showNotification('Creating your account...', 'info');
                 
-                // Simulate signup process
-                setTimeout(() => {
-                    showNotification('Account created successfully! Welcome to StackIt!', 'success');
-                    // Redirect to dashboard or home page
-                    // window.location.href = 'dashboard.html';
-                }, 1500);
+                try {
+                    const result = await window.authService.registerUser(email, password, {
+                        username: username,
+                        displayName: displayName || username
+                    });
+                    
+                    if (result.success) {
+                        showNotification('Account created successfully! Welcome to StackIt!', 'success');
+                        // Store user session
+                        localStorage.setItem('user', JSON.stringify({
+                            uid: result.user.uid,
+                            email: result.user.email
+                        }));
+                        // Redirect to dashboard or home page
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        showNotification(result.error, 'error');
+                    }
+                } catch (error) {
+                    showNotification('Registration failed. Please try again.', 'error');
+                    console.error('Registration error:', error);
+                }
             } else {
                 showNotification('Please fill in all required fields correctly.', 'error');
             }

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Diagnostic Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .diagnostic-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .success {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .info {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        button {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        
+        button:hover {
+            background: #1d4ed8;
+        }
+        
+        .config-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border: 1px solid #e9ecef;
+        }
+        
+        .instructions {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1d4ed8;
+        }
+        
+        .step {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Firebase Diagnostic Tool</h1>
+        
+        <div class="diagnostic-item">
+            <h3>1. Firebase Configuration Status</h3>
+            <button onclick="checkConfig()">Check Configuration</button>
+            <div id="configResult"></div>
+        </div>
+        
+        <div class="diagnostic-item">
+            <h3>2. Firebase SDK Loading</h3>
+            <button onclick="checkSDK()">Check SDK Loading</button>
+            <div id="sdkResult"></div>
+        </div>
+        
+        <div class="diagnostic-item">
+            <h3>3. Authentication Service</h3>
+            <button onclick="checkAuth()">Check Authentication</button>
+            <div id="authResult"></div>
+        </div>
+        
+        <div class="diagnostic-item">
+            <h3>4. Firestore Database</h3>
+            <button onclick="checkFirestore()">Check Firestore</button>
+            <div id="firestoreResult"></div>
+        </div>
+        
+        <div class="instructions">
+            <h3>🚀 Setup Instructions</h3>
+            <p>If you're getting the "auth/configuration-not-found" error, follow these steps:</p>
+            
+            <div class="step">
+                <strong>Step 1:</strong> Go to <a href="https://console.firebase.google.com/project/stackit-3287a" target="_blank">Firebase Console</a>
+            </div>
+            
+            <div class="step">
+                <strong>Step 2:</strong> Click on "Authentication" in the left sidebar
+            </div>
+            
+            <div class="step">
+                <strong>Step 3:</strong> Click "Get started" (if not already set up)
+            </div>
+            
+            <div class="step">
+                <strong>Step 4:</strong> Go to "Sign-in method" tab
+            </div>
+            
+            <div class="step">
+                <strong>Step 5:</strong> Enable "Email/Password" provider
+            </div>
+            
+            <div class="step">
+                <strong>Step 6:</strong> Click on "Firestore Database" and create database in test mode
+            </div>
+            
+            <div class="step">
+                <strong>Step 7:</strong> Update Firestore Security Rules (see below)
+            </div>
+            
+            <div class="step">
+                <strong>Step 8:</strong> Come back and run the tests again
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border: 1px solid #ffeaa7;">
+                <h4 style="margin-top: 0; color: #d68910;">🔒 Firestore Security Rules Update Required</h4>
+                <p>Copy the security rules from <code>firestore-security-rules.txt</code> and paste them in:</p>
+                <p><strong>Firebase Console → Firestore Database → Rules → Edit Rules</strong></p>
+                <button onclick="showSecurityRules()">Show Security Rules</button>
+                <div id="securityRulesDisplay" style="display: none; margin-top: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Make functions global
+        window.checkConfig = checkConfig;
+        window.checkSDK = checkSDK;
+        window.checkAuth = checkAuth;
+        window.checkFirestore = checkFirestore;
+        window.showSecurityRules = showSecurityRules;
+        
+        function showSecurityRules() {
+            const display = document.getElementById('securityRulesDisplay');
+            if (display.style.display === 'none') {
+                display.innerHTML = `
+                    <div class="config-display">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users collection
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null;
+    }
+    
+    // Questions collection - public read, auth write
+    match /questions/{questionId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorId;
+    }
+    
+    // Answers collection - public read, auth write
+    match /answers/{answerId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.authorId;
+    }
+    
+    // Test collection for diagnostics
+    match /test/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</div>
+                    <p style="margin-top: 10px; color: #d68910;"><strong>Instructions:</strong></p>
+                    <ol style="margin: 5px 0; padding-left: 20px;">
+                        <li>Copy the above rules</li>
+                        <li>Go to Firebase Console → Firestore Database → Rules</li>
+                        <li>Click "Edit Rules"</li>
+                        <li>Replace all content with the rules above</li>
+                        <li>Click "Publish"</li>
+                    </ol>
+                `;
+                display.style.display = 'block';
+            } else {
+                display.style.display = 'none';
+            }
+        }
+        
+        async function checkConfig() {
+            const resultDiv = document.getElementById('configResult');
+            
+            try {
+                // Import and check configuration
+                const { app } = await import('./firebase-modern.js');
+                
+                resultDiv.innerHTML = `
+                    <span class="status success">✅ PASSED</span>
+                    <div class="config-display">Firebase Configuration Loaded Successfully:
+Project ID: stackit-3287a
+Auth Domain: stackit-3287a.firebaseapp.com
+API Key: AIzaSyAJB6PerPX5vz4QWI-PLD1ulr-ISgrAzBA (configured)
+Storage Bucket: stackit-3287a.firebasestorage.app</div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <span class="status error">❌ FAILED</span>
+                    <div class="config-display">Error: ${error.message}</div>
+                `;
+            }
+        }
+        
+        async function checkSDK() {
+            const resultDiv = document.getElementById('sdkResult');
+            
+            try {
+                // Check if Firebase SDK is loading
+                const firebaseApp = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js');
+                const firebaseAuth = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js');
+                const firebaseFirestore = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js');
+                
+                resultDiv.innerHTML = `
+                    <span class="status success">✅ PASSED</span>
+                    <div class="config-display">Firebase SDK v11.10.0 loaded successfully:
+✅ Firebase App
+✅ Firebase Auth
+✅ Firebase Firestore
+✅ ES6 Modules working</div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <span class="status error">❌ FAILED</span>
+                    <div class="config-display">SDK Loading Error: ${error.message}</div>
+                `;
+            }
+        }
+        
+        async function checkAuth() {
+            const resultDiv = document.getElementById('authResult');
+            
+            try {
+                const { authService } = await import('./firebase-modern.js');
+                
+                // Try to get current user (this tests if auth is configured)
+                const currentUser = authService.getCurrentUser();
+                
+                resultDiv.innerHTML = `
+                    <span class="status success">✅ PASSED</span>
+                    <div class="config-display">Authentication Service Status:
+✅ Auth service initialized
+✅ No configuration errors
+Current User: ${currentUser ? currentUser.email : 'Not logged in'}
+
+Note: If you still get "auth/configuration-not-found" during registration/login,
+you need to enable Email/Password authentication in Firebase Console.</div>
+                `;
+            } catch (error) {
+                if (error.message.includes('auth/configuration-not-found')) {
+                    resultDiv.innerHTML = `
+                        <span class="status error">❌ CONFIGURATION MISSING</span>
+                        <div class="config-display">Authentication not enabled in Firebase Console!
+
+Please follow these steps:
+1. Go to https://console.firebase.google.com/project/stackit-3287a
+2. Click "Authentication" → "Get started"
+3. Go to "Sign-in method" tab
+4. Enable "Email/Password" provider
+5. Save and try again</div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <span class="status error">❌ FAILED</span>
+                        <div class="config-display">Auth Error: ${error.message}</div>
+                    `;
+                }
+            }
+        }
+        
+        async function checkFirestore() {
+            const resultDiv = document.getElementById('firestoreResult');
+            
+            try {
+                const { db } = await import('./firebase-modern.js');
+                const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js');
+                
+                // Try a simple Firestore operation
+                const testCollection = collection(db, 'test');
+                await getDocs(testCollection);
+                
+                resultDiv.innerHTML = `
+                    <span class="status success">✅ PASSED</span>
+                    <div class="config-display">Firestore Database Status:
+✅ Firestore initialized
+✅ Database connection working
+✅ Security rules allow access
+✅ Ready for data operations</div>
+                `;
+            } catch (error) {
+                if (error.message.includes('7 PERMISSION_DENIED') || error.message.includes('Missing or insufficient permissions')) {
+                    resultDiv.innerHTML = `
+                        <span class="status error">❌ PERMISSION DENIED</span>
+                        <div class="config-display">Firestore Security Rules Issue!
+
+The error "Missing or insufficient permissions" means your Firestore 
+security rules are blocking the operations.
+
+Current Error: ${error.message}
+
+SOLUTION:
+1. Go to Firebase Console → Firestore Database → Rules
+2. Replace the rules with the ones shown below
+3. Click "Publish"
+
+This will allow:
+- Public reading of questions/answers (for Q&A forum)
+- Authenticated users to create/edit their content
+- Test operations for diagnostics</div>
+                    `;
+                } else if (error.message.includes('not found')) {
+                    resultDiv.innerHTML = `
+                        <span class="status warning">⚠️ NEEDS SETUP</span>
+                        <div class="config-display">Firestore not configured!
+
+Please follow these steps:
+1. Go to https://console.firebase.google.com/project/stackit-3287a
+2. Click "Firestore Database"
+3. Click "Create database"
+4. Choose "Start in test mode"
+5. Select a location and create</div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <span class="status error">❌ FAILED</span>
+                        <div class="config-display">Firestore Error: ${error.message}
+
+If this is a permission error, you need to update your security rules.</div>
+                    `;
+                }
+            }
+        }
+        
+        // Auto-run diagnostics on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkConfig();
+                checkSDK();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Question - StackIt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .ask-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 50px;
+            cursor: text;
+        }
+        
+        .tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+        
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 100px;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 2rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 1rem;
+        }
+        
+        .btn:hover {
+            background: #5147eb;
+        }
+        
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .preview-container {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+            display: none;
+        }
+        
+        .preview-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .preview-content {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: #4b5563;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message,
+        .success-message {
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+        
+        .success-message {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .user-info {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #0ea5e9;
+        }
+        
+        .char-count {
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-align: right;
+        }
+        
+        .guidelines {
+            background: #fffbeb;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .guidelines h4 {
+            margin-top: 0;
+            color: #92400e;
+        }
+        
+        .guidelines ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .guidelines li {
+            margin-bottom: 0.25rem;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: #6366f1; padding: 1rem 0; margin-bottom: 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold;">StackIt</a>
+            <div id="userNav" style="color: white;"></div>
+        </div>
+    </nav>
+
+    <div class="ask-container">
+        <a href="questions.html" class="back-link">← Back to Questions</a>
+        
+        <h1 style="margin-bottom: 1.5rem; color: #1f2937;">Ask a Question</h1>
+        
+        <div id="userInfo" class="user-info" style="display: none;">
+            <strong>Posting as:</strong> <span id="currentUser"></span>
+        </div>
+        
+        <div class="guidelines">
+            <h4>Writing a good question</h4>
+            <ul>
+                <li>Make your question title specific and descriptive</li>
+                <li>Explain the problem clearly in the description</li>
+                <li>Include relevant code, error messages, or examples</li>
+                <li>Add appropriate tags to help others find your question</li>
+                <li>Search for similar questions before posting</li>
+            </ul>
+        </div>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+        
+        <form id="questionForm">
+            <div class="form-group">
+                <label for="title">Question Title *</label>
+                <input 
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    required 
+                    placeholder="What's your programming question? Be specific."
+                    maxlength="200"
+                >
+                <div class="char-count">
+                    <span id="titleCount">0</span>/200 characters
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="content">Question Details *</label>
+                <textarea 
+                    id="content" 
+                    name="content" 
+                    required 
+                    placeholder="Describe your problem in detail. Include any relevant code, error messages, and what you've tried so far."
+                    maxlength="5000"
+                ></textarea>
+                <div class="char-count">
+                    <span id="contentCount">0</span>/5000 characters
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <div class="tags-input" id="tagsContainer">
+                    <input 
+                        type="text" 
+                        id="tagInput" 
+                        class="tag-input" 
+                        placeholder="Add tags (press Enter to add)..."
+                    >
+                </div>
+                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">
+                    Add up to 5 tags to describe what your question is about (e.g., javascript, html, css, react)
+                </small>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button type="submit" class="btn" id="submitBtn">
+                    <span id="submitText">Post Question</span>
+                    <span id="submitSpinner" style="display: none;">Posting...</span>
+                </button>
+                <button type="button" class="btn btn-secondary" id="previewBtn">Preview</button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='questions.html'">Cancel</button>
+            </div>
+        </form>
+        
+        <div id="previewContainer" class="preview-container">
+            <h3>Preview</h3>
+            <div class="preview-title" id="previewTitle"></div>
+            <div class="preview-content" id="previewContent"></div>
+            <div id="previewTags" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService } from './firebase-modern.js';
+        
+        // DOM elements
+        const questionForm = document.getElementById('questionForm');
+        const titleInput = document.getElementById('title');
+        const contentInput = document.getElementById('content');
+        const tagInput = document.getElementById('tagInput');
+        const tagsContainer = document.getElementById('tagsContainer');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitSpinner = document.getElementById('submitSpinner');
+        const previewBtn = document.getElementById('previewBtn');
+        const previewContainer = document.getElementById('previewContainer');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const userInfo = document.getElementById('userInfo');
+        const currentUserSpan = document.getElementById('currentUser');
+        const userNav = document.getElementById('userNav');
+        const titleCount = document.getElementById('titleCount');
+        const contentCount = document.getElementById('contentCount');
+        
+        let tags = [];
+        let currentUser = null;
+        
+        // Check authentication
+        authService.onAuthStateChange((user) => {
+            if (user) {
+                currentUser = user;
+                userInfo.style.display = 'block';
+                currentUserSpan.textContent = user.email;
+                userNav.innerHTML = `
+                    <span>Welcome, ${user.email}</span>
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
+                `;
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = 'login-modern.html';
+            }
+        });
+        
+        // Make logout function global
+        window.logout = async () => {
+            await authService.logoutUser();
+            window.location.href = 'index.html';
+        };
+        
+        // Character counting
+        titleInput.addEventListener('input', () => {
+            titleCount.textContent = titleInput.value.length;
+        });
+        
+        contentInput.addEventListener('input', () => {
+            contentCount.textContent = contentInput.value.length;
+        });
+        
+        // Tag handling
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTag();
+            }
+        });
+        
+        tagsContainer.addEventListener('click', () => {
+            tagInput.focus();
+        });
+        
+        function addTag() {
+            const tagText = tagInput.value.trim().toLowerCase();
+            
+            if (tagText && !tags.includes(tagText) && tags.length < 5) {
+                tags.push(tagText);
+                renderTags();
+                tagInput.value = '';
+            }
+        }
+        
+        function removeTag(tagToRemove) {
+            tags = tags.filter(tag => tag !== tagToRemove);
+            renderTags();
+        }
+        
+        function renderTags() {
+            const existingTags = tagsContainer.querySelectorAll('.tag');
+            existingTags.forEach(tag => tag.remove());
+            
+            tags.forEach(tag => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `
+                    ${tag}
+                    <span class="tag-remove" onclick="removeTag('${tag}')">×</span>
+                `;
+                tagsContainer.insertBefore(tagElement, tagInput);
+            });
+        }
+        
+        // Make removeTag function global
+        window.removeTag = removeTag;
+        
+        // Preview functionality
+        previewBtn.addEventListener('click', () => {
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            
+            if (!title && !content) {
+                showError('Please enter a title and content to preview');
+                return;
+            }
+            
+            document.getElementById('previewTitle').textContent = title || 'No title';
+            document.getElementById('previewContent').textContent = content || 'No content';
+            
+            const previewTags = document.getElementById('previewTags');
+            if (tags.length > 0) {
+                previewTags.innerHTML = `<strong>Tags:</strong> ${tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}`;
+            } else {
+                previewTags.innerHTML = '<strong>Tags:</strong> None';
+            }
+            
+            previewContainer.style.display = previewContainer.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // Form submission
+        questionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showError('Please log in to post a question');
+                return;
+            }
+            
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            
+            if (!validateForm(title, content)) {
+                return;
+            }
+            
+            setLoading(true);
+            hideMessages();
+            
+            try {
+                const questionData = {
+                    title: title,
+                    content: content,
+                    tags: tags,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.email
+                };
+                
+                const result = await questionService.createQuestion(questionData);
+                
+                if (result.success) {
+                    showSuccess('Question posted successfully! Redirecting...');
+                    
+                    // Redirect to the new question after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = `question.html?id=${result.id}`;
+                    }, 2000);
+                } else {
+                    showError(result.error || 'Failed to post question. Please try again.');
+                }
+            } catch (error) {
+                console.error('Question creation error:', error);
+                showError('An unexpected error occurred. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        });
+        
+        // Utility functions
+        function validateForm(title, content) {
+            if (!title) {
+                showError('Please enter a question title');
+                titleInput.focus();
+                return false;
+            }
+            
+            if (title.length < 10) {
+                showError('Question title must be at least 10 characters long');
+                titleInput.focus();
+                return false;
+            }
+            
+            if (!content) {
+                showError('Please enter question details');
+                contentInput.focus();
+                return false;
+            }
+            
+            if (content.length < 20) {
+                showError('Question content must be at least 20 characters long');
+                contentInput.focus();
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+        
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+        
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+        
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitBtn.disabled = true;
+                submitText.style.display = 'none';
+                submitSpinner.style.display = 'inline';
+            } else {
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                submitSpinner.style.display = 'none';
+            }
+        }
+        
+        // Auto-focus title input
+        titleInput.focus();
+    </script>
+</body>
+</html>

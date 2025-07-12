@@ -1,14 +1,19 @@
 {
-"name": "vite-starter",
-"private": true,
-"version": "0.0.0",
-"type": "module",
-"scripts": {
+  "name": "stackit-forum",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A minimal Q&A forum platform built with Firebase",
+  "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
-},
-"devDependencies": {
+    "preview": "vite preview",
+    "serve": "python -m http.server 8000"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1"
+  },
+  "devDependencies": {
     "vite": "^5.4.2"
-}
+  }
 }

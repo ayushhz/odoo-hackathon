@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Test - Modern</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .test-section h3 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            background: #1d4ed8;
+        }
+        
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .success {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+        
+        .info {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border: 1px solid #93c5fd;
+        }
+        
+        .status {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .questions-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        
+        .question-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .question-title {
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+        
+        .question-meta {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Firebase Modern SDK Test Page</h1>
+        
+        <div id="connectionStatus" class="status"></div>
+        
+        <!-- Firebase Connection Test -->
+        <div class="test-section">
+            <h3>1. Firebase Connection Test</h3>
+            <button onclick="testConnection()">Test Firebase Connection</button>
+            <div id="connectionResult" class="result"></div>
+        </div>
+        
+        <!-- User Registration Test -->
+        <div class="test-section">
+            <h3>2. User Registration Test</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="regEmail" placeholder="test@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="regPassword" placeholder="password123">
+            </div>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="regUsername" placeholder="testuser">
+            </div>
+            <button onclick="testRegistration()">Register User</button>
+            <div id="registrationResult" class="result"></div>
+        </div>
+        
+        <!-- User Login Test -->
+        <div class="test-section">
+            <h3>3. User Login Test</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="loginEmail" placeholder="test@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="loginPassword" placeholder="password123">
+            </div>
+            <button onclick="testLogin()">Login User</button>
+            <button onclick="testLogout()">Logout User</button>
+            <div id="loginResult" class="result"></div>
+        </div>
+        
+        <!-- Question Creation Test -->
+        <div class="test-section">
+            <h3>4. Question Creation Test</h3>
+            <div class="form-group">
+                <label>Question Title:</label>
+                <input type="text" id="questionTitle" placeholder="How to implement Firebase authentication?">
+            </div>
+            <div class="form-group">
+                <label>Question Content:</label>
+                <textarea id="questionContent" rows="4" placeholder="I'm trying to implement Firebase authentication in my web app..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="questionTags" placeholder="firebase, authentication, javascript">
+            </div>
+            <button onclick="testCreateQuestion()">Create Question</button>
+            <div id="questionResult" class="result"></div>
+        </div>
+        
+        <!-- Questions Display Test -->
+        <div class="test-section">
+            <h3>5. Questions Display Test</h3>
+            <button onclick="testGetQuestions()">Load Questions</button>
+            <div id="questionsResult" class="result"></div>
+            <div id="questionsList" class="questions-list" style="display: none;"></div>
+        </div>
+        
+        <!-- User Profile Test -->
+        <div class="test-section">
+            <h3>6. Current User Profile</h3>
+            <button onclick="testGetCurrentUser()">Get Current User</button>
+            <div id="userResult" class="result"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            authService, 
+            questionService, 
+            userService, 
+            utils 
+        } from './firebase-modern.js';
+        
+        // Make functions global for onclick handlers
+        window.testConnection = testConnection;
+        window.testRegistration = testRegistration;
+        window.testLogin = testLogin;
+        window.testLogout = testLogout;
+        window.testCreateQuestion = testCreateQuestion;
+        window.testGetQuestions = testGetQuestions;
+        window.testGetCurrentUser = testGetCurrentUser;
+        
+        // Check Firebase connection on page load
+        window.addEventListener('load', async () => {
+            await testConnection();
+            setupAuthListener();
+        });
+        
+        // Test Firebase Connection
+        async function testConnection() {
+            const resultDiv = document.getElementById('connectionResult');
+            const statusDiv = document.getElementById('connectionStatus');
+            
+            try {
+                resultDiv.innerHTML = 'Testing Firebase connection...';
+                resultDiv.className = 'result info';
+                
+                // Try to get current user (this will test Firebase initialization)
+                const currentUser = authService.getCurrentUser();
+                
+                resultDiv.innerHTML = `✅ Firebase connection successful!
+Config loaded: stackit-3287a project
+SDK Version: v11.10.0 (Modern ES6 modules)
+Current user: ${currentUser ? currentUser.email : 'Not logged in'}`;
+                resultDiv.className = 'result success';
+                
+                statusDiv.innerHTML = '🟢 Firebase Connected';
+                statusDiv.className = 'status success';
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Firebase connection failed: ${error.message}`;
+                resultDiv.className = 'result error';
+                
+                statusDiv.innerHTML = '🔴 Firebase Connection Failed';
+                statusDiv.className = 'status error';
+            }
+        }
+        
+        // Test User Registration
+        async function testRegistration() {
+            const resultDiv = document.getElementById('registrationResult');
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const username = document.getElementById('regUsername').value;
+            
+            if (!email || !password || !username) {
+                resultDiv.innerHTML = '❌ Please fill in all fields';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            resultDiv.innerHTML = 'Registering user...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const result = await authService.registerUser(email, password, {
+                    username: username,
+                    displayName: username
+                });
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `✅ User registered successfully!
+User ID: ${result.user.uid}
+Email: ${result.user.email}`;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `❌ Registration failed: ${result.error}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Registration error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // Test User Login
+        async function testLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                resultDiv.innerHTML = '❌ Please enter email and password';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            resultDiv.innerHTML = 'Logging in...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const result = await authService.loginUser(email, password);
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `✅ Login successful!
+User ID: ${result.user.uid}
+Email: ${result.user.email}`;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `❌ Login failed: ${result.error}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Login error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // Test User Logout
+        async function testLogout() {
+            const resultDiv = document.getElementById('loginResult');
+            
+            try {
+                const result = await authService.logoutUser();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = '✅ Logout successful!';
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.innerHTML = `❌ Logout failed: ${result.error}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Logout error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // Test Question Creation
+        async function testCreateQuestion() {
+            const resultDiv = document.getElementById('questionResult');
+            const currentUser = authService.getCurrentUser();
+            
+            if (!currentUser) {
+                resultDiv.innerHTML = '❌ Please login first to create a question';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            const title = document.getElementById('questionTitle').value;
+            const content = document.getElementById('questionContent').value;
+            const tagsStr = document.getElementById('questionTags').value;
+            
+            if (!title || !content) {
+                resultDiv.innerHTML = '❌ Please fill in title and content';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            resultDiv.innerHTML = 'Creating question...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const tags = tagsStr ? tagsStr.split(',').map(tag => tag.trim()) : [];
+                
+                const result = await questionService.createQuestion({
+                    title: title,
+                    content: content,
+                    tags: tags,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.email
+                });
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `✅ Question created successfully!
+Question ID: ${result.id}
+Title: ${title}`;
+                    resultDiv.className = 'result success';
+                    
+                    // Clear the form
+                    document.getElementById('questionTitle').value = '';
+                    document.getElementById('questionContent').value = '';
+                    document.getElementById('questionTags').value = '';
+                } else {
+                    resultDiv.innerHTML = `❌ Question creation failed: ${result.error}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Question creation error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // Test Get Questions
+        async function testGetQuestions() {
+            const resultDiv = document.getElementById('questionsResult');
+            const questionsList = document.getElementById('questionsList');
+            
+            resultDiv.innerHTML = 'Loading questions...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const result = await questionService.getQuestions(10);
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `✅ Questions loaded successfully!
+Found ${result.questions.length} questions`;
+                    resultDiv.className = 'result success';
+                    
+                    // Display questions
+                    if (result.questions.length > 0) {
+                        questionsList.innerHTML = '';
+                        result.questions.forEach(question => {
+                            const questionDiv = document.createElement('div');
+                            questionDiv.className = 'question-item';
+                            questionDiv.innerHTML = `
+                                <div class="question-title">${question.title}</div>
+                                <div class="question-meta">
+                                    By: ${question.authorName} | 
+                                    Votes: ${question.votes} | 
+                                    Answers: ${question.answers} |
+                                    Tags: ${question.tags ? question.tags.join(', ') : 'None'}
+                                </div>
+                            `;
+                            questionsList.appendChild(questionDiv);
+                        });
+                        questionsList.style.display = 'block';
+                    } else {
+                        questionsList.innerHTML = '<p>No questions found. Create some questions first!</p>';
+                        questionsList.style.display = 'block';
+                    }
+                } else {
+                    resultDiv.innerHTML = `❌ Failed to load questions: ${result.error}`;
+                    resultDiv.className = 'result error';
+                    questionsList.style.display = 'none';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Questions loading error: ${error.message}`;
+                resultDiv.className = 'result error';
+                questionsList.style.display = 'none';
+            }
+        }
+        
+        // Test Get Current User
+        async function testGetCurrentUser() {
+            const resultDiv = document.getElementById('userResult');
+            
+            try {
+                const currentUser = authService.getCurrentUser();
+                
+                if (currentUser) {
+                    // Try to get user profile from Firestore
+                    const profileResult = await userService.getUserProfile(currentUser.uid);
+                    
+                    if (profileResult.success) {
+                        resultDiv.innerHTML = `✅ Current user profile:
+UID: ${currentUser.uid}
+Email: ${currentUser.email}
+Username: ${profileResult.user.username}
+Display Name: ${profileResult.user.displayName}
+Reputation: ${profileResult.user.reputation}
+Role: ${profileResult.user.role}`;
+                        resultDiv.className = 'result success';
+                    } else {
+                        resultDiv.innerHTML = `✅ Current user (Auth only):
+UID: ${currentUser.uid}
+Email: ${currentUser.email}
+Note: Profile not found in Firestore`;
+                        resultDiv.className = 'result success';
+                    }
+                } else {
+                    resultDiv.innerHTML = '❌ No user currently logged in';
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error getting user: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+        
+        // Setup auth state listener
+        function setupAuthListener() {
+            authService.onAuthStateChange((user) => {
+                const statusDiv = document.getElementById('connectionStatus');
+                if (user) {
+                    statusDiv.innerHTML = `🟢 Firebase Connected - Logged in as: ${user.email}`;
+                    statusDiv.className = 'status success';
+                } else {
+                    statusDiv.innerHTML = '🟡 Firebase Connected - Not logged in';
+                    statusDiv.className = 'status info';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
