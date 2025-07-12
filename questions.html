@@ -302,6 +302,7 @@
             margin-bottom: 1.5rem;
             display: -webkit-box;
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
             position: relative;
@@ -445,12 +446,25 @@
         .nav-container a {
             color: #e2e8f0;
             text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .nav-container a:first-child {
             font-size: 1.8rem;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            padding: 0;
+        }
+
+        .nav-container a:not(:first-child):hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #667eea;
         }
 
         #userNav {
@@ -520,7 +534,12 @@
     <nav>
         <div class="nav-container">
             <a href="index.html">StackIt</a>
-            <div id="userNav"></div>
+            <div style="display: flex; gap: 2rem; align-items: center;">
+                <a href="questions.html">Questions</a>
+                <a href="ask-question.html">Ask Question</a>
+                <a href="profile.html">Profile</a>
+                <div id="userNav"></div>
+            </div>
         </div>
     </nav>
 
@@ -579,14 +598,8 @@
         authService.onAuthStateChange((user) => {
             if (user) {
                 userNav.innerHTML = `
-<<<<<<< HEAD
                     <span>Welcome, ${user.email.split('@')[0]}</span>
-                    <a href="profile.html" style="margin-left: 1rem; color: white; text-decoration: none;">Profile</a>
-                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
-=======
-                    <span>Welcome, ${user.email}</span>
-                    <button onclick="logout()">Logout</button>
->>>>>>> 2bea64be5ba272fbb1a31aa934315cdf55c0e55d
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 20px; cursor: pointer;">Logout</button>
                 `;
             } else {
                 userNav.innerHTML = `

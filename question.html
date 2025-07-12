@@ -207,30 +207,38 @@
             background: rgba(30, 41, 59, 0.4);
             border: 1px solid #475569;
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .answer-main {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
         }
         
         .answer-content {
+            flex: 1;
             line-height: 1.6;
-            margin-bottom: 1.5rem;
-            white-space: pre-wrap;
             color: #e2e8f0;
+            white-space: pre-wrap;
         }
         
         .answer-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid #475569;
         }
         
         .accepted-answer {
-            border-left: 4px solid #10b981;
-            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
         }
         
         .accept-btn {
@@ -393,6 +401,12 @@
             font-size: 1.5rem;
             font-weight: bold;
         }
+
+        /* Navigation menu links */
+        nav a:not(.logo):hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #8b5cf6 !important;
+        }
         
         nav .user-nav {
             color: #e2e8f0;
@@ -424,7 +438,12 @@
     <nav>
         <div class="container">
             <a href="index.html" class="logo">StackIt</a>
-            <div id="userNav" class="user-nav"></div>
+            <div style="display: flex; gap: 2rem; align-items: center;">
+                <a href="questions.html" style="color: #e2e8f0; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 0.5rem 1rem; border-radius: 20px;">Questions</a>
+                <a href="ask-question.html" style="color: #e2e8f0; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 0.5rem 1rem; border-radius: 20px;">Ask Question</a>
+                <a href="profile.html" style="color: #e2e8f0; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 0.5rem 1rem; border-radius: 20px;">Profile</a>
+                <div id="userNav" class="user-nav"></div>
+            </div>
         </div>
     </nav>
 
@@ -512,7 +531,7 @@
     </div>
 
     <script type="module">
-        import { authService, questionService, answerService } from './firebase-modern.js';
+        import { authService, questionService, answerService, votingService } from './firebase-modern.js';
         
         // Get question ID from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -535,14 +554,8 @@
             currentUser = user;
             if (user) {
                 userNav.innerHTML = `
-<<<<<<< HEAD
                     <span>Welcome, ${user.email.split('@')[0]}</span>
-                    <a href="profile.html" style="margin-left: 1rem; color: white; text-decoration: none;">Profile</a>
-                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
-=======
-                    <span>Welcome, ${user.email}</span>
-                    <button onclick="logout()">Logout</button>
->>>>>>> 2bea64be5ba272fbb1a31aa934315cdf55c0e55d
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 20px; cursor: pointer;">Logout</button>
                 `;
                 answerForm.style.display = 'block';
                 loginRequired.style.display = 'none';
@@ -594,6 +607,32 @@
             }
         }
         
+        async function loadUserVoteStatus() {
+            if (!currentUser) return;
+            
+            try {
+                const userVote = await votingService.getUserQuestionVote(questionId, currentUser.uid);
+                
+                if (userVote.success && userVote.vote) {
+                    const upvoteBtn = document.getElementById('upvoteBtn');
+                    const downvoteBtn = document.getElementById('downvoteBtn');
+                    
+                    // Reset states
+                    upvoteBtn.classList.remove('voted');
+                    downvoteBtn.classList.remove('voted');
+                    
+                    // Set current vote state
+                    if (userVote.vote.direction === 1) {
+                        upvoteBtn.classList.add('voted');
+                    } else if (userVote.vote.direction === -1) {
+                        downvoteBtn.classList.add('voted');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user vote status:', error);
+            }
+        }
+        
         function displayQuestion(question) {
             document.getElementById('questionTitle').textContent = question.title;
             document.getElementById('questionBody').textContent = question.content;
@@ -624,6 +663,9 @@
             document.getElementById('questionViews').textContent = `${question.views || 0} views`;
             
             questionContent.style.display = 'block';
+            
+            // Load user's vote status after displaying question
+            loadUserVoteStatus();
         }
         
         async function loadAnswers() {
@@ -656,7 +698,14 @@
                 
                 return `
                     <div class="answer-item ${acceptedClass}">
-                        <div class="answer-content">${escapeHtml(answer.content)}</div>
+                        <div class="answer-main">
+                            <div class="vote-buttons">
+                                <button class="vote-btn" onclick="voteAnswer('${answer.id}', 1)">▲</button>
+                                <span class="vote-count" id="answerVotes_${answer.id}">${answer.votes || 0}</span>
+                                <button class="vote-btn" onclick="voteAnswer('${answer.id}', -1)">▼</button>
+                            </div>
+                            <div class="answer-content">${escapeHtml(answer.content)}</div>
+                        </div>
                         <div class="answer-meta">
                             <div class="author-info">
                                 <div class="author-avatar">${authorInitial}</div>
@@ -674,7 +723,31 @@
         
         // Make functions global for onclick handlers
         window.voteQuestion = voteQuestion;
+        window.voteAnswer = voteAnswer;
         window.submitAnswer = submitAnswer;
+        
+        async function voteAnswer(answerId, direction) {
+            if (!currentUser) {
+                alert('Please log in to vote');
+                return;
+            }
+            
+            try {
+                const result = await votingService.voteAnswer(answerId, currentUser.uid, direction);
+                
+                if (result.success) {
+                    // Update vote count display
+                    const voteCount = document.getElementById(`answerVotes_${answerId}`);
+                    const currentVotes = parseInt(voteCount.textContent) || 0;
+                    voteCount.textContent = currentVotes + result.voteChange;
+                } else {
+                    alert('Error voting: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error voting on answer:', error);
+                alert('Error voting. Please try again.');
+            }
+        }
         
         async function voteQuestion(direction) {
             if (!currentUser) {
@@ -682,8 +755,39 @@
                 return;
             }
             
-            // Voting functionality would be implemented here
-            alert('Voting feature coming soon!');
+            try {
+                const result = await votingService.voteQuestion(questionId, currentUser.uid, direction);
+                
+                if (result.success) {
+                    // Update vote count display
+                    const voteCount = document.getElementById('voteCount');
+                    const currentVotes = parseInt(voteCount.textContent) || 0;
+                    voteCount.textContent = currentVotes + result.voteChange;
+                    
+                    // Update button states
+                    const upvoteBtn = document.getElementById('upvoteBtn');
+                    const downvoteBtn = document.getElementById('downvoteBtn');
+                    
+                    // Reset button states
+                    upvoteBtn.classList.remove('voted');
+                    downvoteBtn.classList.remove('voted');
+                    
+                    // Get current user vote to update button state
+                    const userVote = await votingService.getUserQuestionVote(questionId, currentUser.uid);
+                    if (userVote.success && userVote.vote) {
+                        if (userVote.vote.direction === 1) {
+                            upvoteBtn.classList.add('voted');
+                        } else if (userVote.vote.direction === -1) {
+                            downvoteBtn.classList.add('voted');
+                        }
+                    }
+                } else {
+                    alert('Error voting: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error voting:', error);
+                alert('Error voting. Please try again.');
+            }
         }
         
         async function submitAnswer() {

@@ -377,6 +377,133 @@ export const storageService = {
     }
 };
 
+// Voting service
+export const votingService = {
+    // Vote on a question
+    async voteQuestion(questionId, userId, direction) {
+        try {
+            const voteId = `${questionId}_${userId}`;
+            const voteRef = doc(db, 'votes', voteId);
+            const voteDoc = await getDoc(voteRef);
+            
+            let voteChange = 0;
+            
+            if (voteDoc.exists()) {
+                const existingVote = voteDoc.data();
+                if (existingVote.direction === direction) {
+                    // Remove vote if clicking same direction
+                    await deleteDoc(voteRef);
+                    voteChange = -direction;
+                } else {
+                    // Change vote direction
+                    await updateDoc(voteRef, {
+                        direction: direction,
+                        updatedAt: serverTimestamp()
+                    });
+                    voteChange = direction - existingVote.direction;
+                }
+            } else {
+                // Create new vote
+                await setDoc(voteRef, {
+                    questionId: questionId,
+                    userId: userId,
+                    direction: direction,
+                    type: 'question',
+                    createdAt: serverTimestamp()
+                });
+                voteChange = direction;
+            }
+            
+            // Update question vote count
+            await updateDoc(doc(db, 'questions', questionId), {
+                votes: increment(voteChange)
+            });
+            
+            return { success: true, voteChange };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Vote on an answer
+    async voteAnswer(answerId, userId, direction) {
+        try {
+            const voteId = `${answerId}_${userId}`;
+            const voteRef = doc(db, 'answer_votes', voteId);
+            const voteDoc = await getDoc(voteRef);
+            
+            let voteChange = 0;
+            
+            if (voteDoc.exists()) {
+                const existingVote = voteDoc.data();
+                if (existingVote.direction === direction) {
+                    // Remove vote if clicking same direction
+                    await deleteDoc(voteRef);
+                    voteChange = -direction;
+                } else {
+                    // Change vote direction
+                    await updateDoc(voteRef, {
+                        direction: direction,
+                        updatedAt: serverTimestamp()
+                    });
+                    voteChange = direction - existingVote.direction;
+                }
+            } else {
+                // Create new vote
+                await setDoc(voteRef, {
+                    answerId: answerId,
+                    userId: userId,
+                    direction: direction,
+                    type: 'answer',
+                    createdAt: serverTimestamp()
+                });
+                voteChange = direction;
+            }
+            
+            // Update answer vote count
+            await updateDoc(doc(db, 'answers', answerId), {
+                votes: increment(voteChange)
+            });
+            
+            return { success: true, voteChange };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Get user's vote for a question
+    async getUserQuestionVote(questionId, userId) {
+        try {
+            const voteId = `${questionId}_${userId}`;
+            const voteDoc = await getDoc(doc(db, 'votes', voteId));
+            
+            if (voteDoc.exists()) {
+                return { success: true, vote: voteDoc.data() };
+            } else {
+                return { success: true, vote: null };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Get user's vote for an answer
+    async getUserAnswerVote(answerId, userId) {
+        try {
+            const voteId = `${answerId}_${userId}`;
+            const voteDoc = await getDoc(doc(db, 'answer_votes', voteId));
+            
+            if (voteDoc.exists()) {
+                return { success: true, vote: voteDoc.data() };
+            } else {
+                return { success: true, vote: null };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+};
+
 // Utility functions
 export const utils = {
     // Format timestamp
