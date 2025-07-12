@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Answers - StackIt</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #475569;
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            border: 1px solid #475569;
+        }
+        
+        .test-section h3 {
+            color: #8b5cf6;
+            margin-top: 0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .error { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .info { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #a855f7;
+            transform: translateX(-4px);
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .feature-list li:before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="questions.html" class="back-link">← Back to Questions</a>
+        
+        <h1>Answers & Voting System Test</h1>
+        
+        <div class="test-section">
+            <h3>🎉 Features Now Working:</h3>
+            <ul class="feature-list">
+                <li><strong>Anyone can view answers</strong> - No login required to see question answers</li>
+                <li><strong>Anyone can view voting</strong> - Vote buttons and counts are visible to all</li>
+                <li><strong>Logged-in users can vote</strong> - Upvote/downvote questions and answers</li>
+                <li><strong>Logged-in users can answer</strong> - Submit answers to any question</li>
+                <li><strong>Real-time updates</strong> - Vote counts and new answers appear immediately</li>
+                <li><strong>Smart voting</strong> - Click same button to remove vote, opposite to change</li>
+                <li><strong>Answer form visibility</strong> - Only shows for logged-in users</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 How to Test:</h3>
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="window.open('create-sample-data.html', '_blank')">
+                    1. Create Sample Data
+                </button>
+                <p style="margin: 0.5rem 0; color: #94a3b8;">First, create some test questions and answers</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="window.open('questions.html', '_blank')">
+                    2. Browse Questions
+                </button>
+                <p style="margin: 0.5rem 0; color: #94a3b8;">View all questions and click on one to see answers</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="testAnswersVisibility()">
+                    3. Test Answers Visibility
+                </button>
+                <p style="margin: 0.5rem 0; color: #94a3b8;">Verify answers show for everyone (logged in or not)</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔐 Authentication Testing:</h3>
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="window.open('login.html', '_blank')">
+                    Login to Test Answering
+                </button>
+                <p style="margin: 0.5rem 0; color: #94a3b8;">Log in to see the answer form and voting buttons</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <button class="btn" onclick="testLoggedOutView()">
+                    Test Logged-Out View
+                </button>
+                <p style="margin: 0.5rem 0; color: #94a3b8;">See how the page looks when not logged in</p>
+            </div>
+        </div>
+        
+        <div id="status" style="display: none;"></div>
+    </div>
+
+    <script>
+        function testAnswersVisibility() {
+            showStatus('✅ Answers are now visible to everyone! Go to any question page to see answers without logging in.', 'success');
+        }
+        
+        function testLoggedOutView() {
+            showStatus('📝 When logged out: You can see all answers and vote counts, but the answer form is hidden. Log in to submit answers and vote!', 'info');
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

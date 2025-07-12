@@ -502,7 +502,7 @@
             </div>
         </div>
         
-        <div id="answersSection" class="answers-section" style="display: none;">
+        <div id="answersSection" class="answers-section">
             <div class="answers-header">
                 <h2 class="answers-count"><span id="answersCount">0</span> Answers</h2>
             </div>
@@ -525,7 +525,7 @@
             </div>
             
             <div id="loginRequired" class="login-required" style="display: none;">
-                <p>You must be <a href="login-modern.html">logged in</a> to answer this question.</p>
+                <p>You must be <a href="login.html">logged in</a> to answer this question.</p>
             </div>
         </div>
     </div>
@@ -552,20 +552,34 @@
         // Check authentication
         authService.onAuthStateChange((user) => {
             currentUser = user;
+            console.log('Auth state changed:', user ? user.email : 'No user');
+            
             if (user) {
                 userNav.innerHTML = `
                     <span>Welcome, ${user.email.split('@')[0]}</span>
                     <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 20px; cursor: pointer;">Logout</button>
                 `;
-                answerForm.style.display = 'block';
-                loginRequired.style.display = 'none';
+                // Show answer form for logged-in users
+                if (answerForm) {
+                    answerForm.style.display = 'block';
+                    console.log('Answer form shown for logged-in user');
+                }
+                if (loginRequired) {
+                    loginRequired.style.display = 'none';
+                }
             } else {
                 userNav.innerHTML = `
-                    <a href="login-modern.html">Login</a>
-                    <a href="signup-modern.html">Sign Up</a>
+                    <a href="login.html">Login</a>
+                    <a href="signup.html">Sign Up</a>
                 `;
-                answerForm.style.display = 'none';
-                loginRequired.style.display = 'block';
+                // Hide answer form for non-logged-in users
+                if (answerForm) {
+                    answerForm.style.display = 'none';
+                    console.log('Answer form hidden for non-logged-in user');
+                }
+                if (loginRequired) {
+                    loginRequired.style.display = 'block';
+                }
             }
         });
         
@@ -589,7 +603,7 @@
                 console.log('Loading question with ID:', questionId);
                 loadingMessage.style.display = 'block';
                 questionContent.style.display = 'none';
-                answersSection.style.display = 'none';
+                // Don't hide answers section here - let loadAnswers handle it
                 
                 const result = await questionService.getQuestionById(questionId);
                 console.log('Question loaded:', result);
@@ -683,7 +697,7 @@
                     console.error('Failed to load answers:', result.error);
                 }
                 
-                answersSection.style.display = 'block';
+                // Answers section is already visible by default
             } catch (error) {
                 console.error('Error loading answers:', error);
             }

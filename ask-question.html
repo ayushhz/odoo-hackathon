@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Question - StackIt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        nav {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .ask-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .form-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #475569;
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #475569;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: rgba(15, 23, 42, 0.8);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            line-height: 1.6;
+        }
+        
+        .tags-input-container {
+            position: relative;
+        }
+        
+        .tags-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        
+        .tag-remove:hover {
+            color: #fecaca;
+        }
+        
+        .submit-section {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+        
+        .btn {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: rgba(71, 85, 105, 0.4);
+            color: #e2e8f0;
+            border: 1px solid #475569;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(71, 85, 105, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: #94a3b8;
+        }
+        
+        .form-help {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #a855f7;
+            transform: translateX(-4px);
+        }
+        
+        .guidelines-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .guidelines-card h3 {
+            color: #10b981;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+        
+        .guidelines-card ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: #94a3b8;
+        }
+        
+        .guidelines-card li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .ask-container {
+                padding: 0 1rem;
+            }
+            
+            .form-card {
+                padding: 1.5rem;
+            }
+            
+            .submit-section {
+                flex-direction: column;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">StackIt</a>
+            <div class="nav-links">
+                <a href="questions.html">Questions</a>
+                <a href="ask-question.html">Ask Question</a>
+                <a href="profile.html">Profile</a>
+                <div id="userNav" class="user-nav"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="ask-container">
+        <a href="questions.html" class="back-link">
+            ← Back to Questions
+        </a>
+        
+        <div class="page-header">
+            <h1 class="page-title">Ask a Question</h1>
+            <p class="page-subtitle">
+                Share your knowledge with the community. Be specific and clear in your question to get the best answers.
+            </p>
+        </div>
+        
+        <div class="guidelines-card">
+            <h3>📝 Writing a Great Question</h3>
+            <ul>
+                <li><strong>Be specific and clear</strong> - Include all relevant details</li>
+                <li><strong>Show your research</strong> - What have you tried already?</li>
+                <li><strong>Include code examples</strong> - If applicable, show your code</li>
+                <li><strong>Use proper tags</strong> - Help others find your question</li>
+                <li><strong>Check for duplicates</strong> - Search before posting</li>
+            </ul>
+        </div>
+        
+        <div class="form-card">
+            <form id="questionForm">
+                <div class="form-group">
+                    <label for="title" class="form-label">Question Title *</label>
+                    <input 
+                        type="text" 
+                        id="title" 
+                        class="form-input" 
+                        placeholder="What is your programming question?"
+                        required
+                        maxlength="150"
+                    >
+                    <div class="form-help">
+                        Be specific and imagine you're asking a question to another person. Include the main keywords.
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content" class="form-label">Question Details *</label>
+                    <textarea 
+                        id="content" 
+                        class="form-textarea" 
+                        placeholder="Provide all the details about your question. Include what you've tried, what you expected to happen, and what actually happened..."
+                        required
+                        rows="12"
+                    ></textarea>
+                    <div class="form-help">
+                        Include all the information someone would need to answer your question. Code snippets, error messages, and expected behavior are very helpful.
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tags" class="form-label">Tags</label>
+                    <input 
+                        type="text" 
+                        id="tags" 
+                        class="form-input" 
+                        placeholder="Add tags separated by commas (e.g., javascript, react, css)"
+                        maxlength="100"
+                    >
+                    <div class="form-help">
+                        Add up to 5 tags to describe what your question is about. Press Enter or comma to add tags.
+                    </div>
+                    <div id="tagsDisplay" class="tags-display"></div>
+                </div>
+                
+                <div class="submit-section">
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        <span id="submitText">Post Your Question</span>
+                        <div id="submitSpinner" class="spinner" style="display: none;"></div>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService } from './firebase-modern.js';
+        
+        const userNav = document.getElementById('userNav');
+        const questionForm = document.getElementById('questionForm');
+        const tagsInput = document.getElementById('tags');
+        const tagsDisplay = document.getElementById('tagsDisplay');
+        
+        let currentUser = null;
+        let tags = [];
+        
+        // Check authentication
+        authService.onAuthStateChange((user) => {
+            currentUser = user;
+            if (user) {
+                userNav.innerHTML = `
+                    <span style="color: #e2e8f0;">Welcome, ${user.email.split('@')[0]}</span>
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 20px; cursor: pointer; transition: all 0.3s ease;">Logout</button>
+                `;
+            } else {
+                userNav.innerHTML = `
+                    <a href="login.html" style="color: #e2e8f0; text-decoration: none; margin-right: 1rem;">Login</a>
+                    <a href="signup.html" style="color: #e2e8f0; text-decoration: none;">Sign Up</a>
+                `;
+                // Redirect to login if not authenticated
+                alert('Please log in to ask a question');
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Handle tags input
+        tagsInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                addTagsFromInput();
+            }
+        });
+        
+        tagsInput.addEventListener('blur', addTagsFromInput);
+        
+        function addTagsFromInput() {
+            const input = tagsInput.value.trim();
+            if (!input) return;
+            
+            const newTags = input.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag && !tags.includes(tag));
+            
+            tags = [...tags, ...newTags].slice(0, 5); // Limit to 5 tags
+            tagsInput.value = '';
+            renderTags();
+        }
+        
+        function renderTags() {
+            tagsDisplay.innerHTML = tags.map(tag => `
+                <span class="tag">
+                    ${tag}
+                    <button type="button" class="tag-remove" onclick="removeTag('${tag}')">×</button>
+                </span>
+            `).join('');
+        }
+        
+        window.removeTag = (tagToRemove) => {
+            tags = tags.filter(tag => tag !== tagToRemove);
+            renderTags();
+        };
+        
+        // Form submission
+        questionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('Please log in to ask a question');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            
+            if (!title || !content) {
+                alert('Please fill in both title and content');
+                return;
+            }
+            
+            if (title.length < 10) {
+                alert('Title must be at least 10 characters long');
+                return;
+            }
+            
+            if (content.length < 20) {
+                alert('Question details must be at least 20 characters long');
+                return;
+            }
+            
+            // Add tags from input if any
+            addTagsFromInput();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitSpinner = document.getElementById('submitSpinner');
+            
+            try {
+                submitBtn.disabled = true;
+                submitText.style.display = 'none';
+                submitSpinner.style.display = 'inline';
+                
+                const questionData = {
+                    title: title,
+                    content: content,
+                    tags: tags,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.email.split('@')[0]
+                };
+                
+                console.log('Submitting question:', questionData);
+                const result = await questionService.createQuestion(questionData);
+                
+                if (result.success) {
+                    alert('Question posted successfully!');
+                    window.location.href = `question.html?id=${result.id}`;
+                } else {
+                    alert('Failed to post question: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error posting question:', error);
+                alert('An error occurred while posting your question');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                submitSpinner.style.display = 'none';
+            }
+        });
+        
+        // Make logout function global
+        window.logout = async () => {
+            await authService.logoutUser();
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

@@ -330,6 +330,24 @@ export const answerService = {
         } catch (error) {
             return { success: false, error: error.message };
         }
+    },
+
+    // Get all answers (for debugging)
+    async getAllAnswers() {
+        try {
+            const q = query(
+                collection(db, 'answers'),
+                orderBy('createdAt', 'desc')
+            );
+            const querySnapshot = await getDocs(q);
+            const answers = [];
+            querySnapshot.forEach((doc) => {
+                answers.push({ id: doc.id, ...doc.data() });
+            });
+            return { success: true, answers };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
     }
 };
 

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Answer Submission - StackIt</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #475569;
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .error { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .info { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #a855f7;
+            transform: translateX(-4px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="questions.html" class="back-link">← Back to Questions</a>
+        
+        <h1>Test Answer Submission</h1>
+        
+        <div class="form-group">
+            <label for="questionId">Question ID:</label>
+            <input type="text" id="questionId" placeholder="Enter question ID to test">
+        </div>
+        
+        <div class="form-group">
+            <label for="answerContent">Answer Content:</label>
+            <textarea id="answerContent" placeholder="Write a test answer..."></textarea>
+        </div>
+        
+        <button class="btn" onclick="testSubmitAnswer()" id="testBtn">Submit Test Answer</button>
+        <button class="btn" onclick="listAllAnswers()">List All Answers</button>
+        <button class="btn" onclick="listAllQuestions()">List All Questions</button>
+        
+        <div id="status" style="display: none;"></div>
+        
+        <div id="results" style="margin-top: 2rem;"></div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService, answerService } from './firebase-modern.js';
+        
+        let currentUser = null;
+        
+        // Check authentication
+        authService.onAuthStateChange((user) => {
+            currentUser = user;
+            if (!user) {
+                showStatus('Please log in first to test answer submission', 'error');
+                document.getElementById('testBtn').disabled = true;
+            } else {
+                showStatus(`Logged in as: ${user.email}`, 'success');
+                document.getElementById('testBtn').disabled = false;
+            }
+        });
+        
+        window.testSubmitAnswer = async function() {
+            if (!currentUser) {
+                showStatus('Please log in first', 'error');
+                return;
+            }
+            
+            const questionId = document.getElementById('questionId').value.trim();
+            const content = document.getElementById('answerContent').value.trim();
+            
+            if (!questionId || !content) {
+                showStatus('Please enter both question ID and answer content', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('testBtn');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Submitting...';
+                
+                const answerData = {
+                    content: content,
+                    questionId: questionId,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.email.split('@')[0]
+                };
+                
+                console.log('Submitting answer:', answerData);
+                const result = await answerService.createAnswer(answerData);
+                console.log('Result:', result);
+                
+                if (result.success) {
+                    showStatus('Answer submitted successfully! Answer ID: ' + result.answerId, 'success');
+                    document.getElementById('answerContent').value = '';
+                    // Load answers for this question
+                    loadAnswersForQuestion(questionId);
+                } else {
+                    showStatus('Failed to submit answer: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Error: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        };
+        
+        window.listAllAnswers = async function() {
+            try {
+                showStatus('Loading all answers...', 'info');
+                // This is a test function to see all answers in the database
+                const result = await answerService.getAllAnswers();
+                console.log('All answers:', result);
+                
+                if (result.success) {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = `
+                        <h3>All Answers (${result.answers.length} found):</h3>
+                        <pre>${JSON.stringify(result.answers, null, 2)}</pre>
+                    `;
+                    showStatus(`Found ${result.answers.length} answers`, 'success');
+                } else {
+                    showStatus('Failed to load answers: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Error: ' + error.message, 'error');
+            }
+        };
+        
+        window.listAllQuestions = async function() {
+            try {
+                showStatus('Loading all questions...', 'info');
+                const result = await questionService.getAllQuestions();
+                console.log('All questions:', result);
+                
+                if (result.success) {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = `
+                        <h3>All Questions (${result.questions.length} found):</h3>
+                        ${result.questions.map(q => `
+                            <div style="border: 1px solid #475569; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+                                <strong>ID:</strong> ${q.id}<br>
+                                <strong>Title:</strong> ${q.title}<br>
+                                <strong>Author:</strong> ${q.authorName}<br>
+                                <button onclick="loadAnswersForQuestion('${q.id}')" class="btn" style="margin-top: 0.5rem;">
+                                    Load Answers for This Question
+                                </button>
+                            </div>
+                        `).join('')}
+                    `;
+                    showStatus(`Found ${result.questions.length} questions`, 'success');
+                } else {
+                    showStatus('Failed to load questions: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Error: ' + error.message, 'error');
+            }
+        };
+        
+        window.loadAnswersForQuestion = async function(questionId) {
+            try {
+                showStatus(`Loading answers for question ${questionId}...`, 'info');
+                const result = await answerService.getAnswersByQuestionId(questionId);
+                console.log('Answers for question:', result);
+                
+                if (result.success) {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = `
+                        <h3>Answers for Question ${questionId} (${result.answers.length} found):</h3>
+                        ${result.answers.length === 0 ? 
+                            '<p>No answers found for this question.</p>' :
+                            result.answers.map(a => `
+                                <div style="border: 1px solid #475569; padding: 1rem; margin: 1rem 0; border-radius: 8px; background: rgba(15, 23, 42, 0.3);">
+                                    <strong>Answer ID:</strong> ${a.id}<br>
+                                    <strong>Author:</strong> ${a.authorName}<br>
+                                    <strong>Content:</strong> ${a.content}<br>
+                                    <strong>Votes:</strong> ${a.votes || 0}<br>
+                                    <strong>Created:</strong> ${a.createdAt ? new Date(a.createdAt.seconds * 1000).toLocaleString() : 'Unknown'}
+                                </div>
+                            `).join('')
+                        }
+                    `;
+                    showStatus(`Found ${result.answers.length} answers for question ${questionId}`, 'success');
+                    
+                    // Pre-fill the question ID field
+                    document.getElementById('questionId').value = questionId;
+                } else {
+                    showStatus('Failed to load answers: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Error: ' + error.message, 'error');
+            }
+        };
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
