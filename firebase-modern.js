@@ -192,6 +192,38 @@ export const questionService = {
         } catch (error) {
             return { success: false, error: error.message };
         }
+    },
+
+    // Get questions by user ID
+    async getQuestionsByUser(userId) {
+        try {
+            console.log('getQuestionsByUser called with userId:', userId);
+            
+            // First try without orderBy to avoid index issues
+            const q = query(
+                collection(db, 'questions'),
+                where('authorId', '==', userId)
+            );
+            const querySnapshot = await getDocs(q);
+            const questions = [];
+            querySnapshot.forEach((doc) => {
+                console.log('Found question:', doc.id, doc.data());
+                questions.push({ id: doc.id, ...doc.data() });
+            });
+            
+            // Sort manually by createdAt in descending order
+            questions.sort((a, b) => {
+                const aTime = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+                const bTime = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+                return bTime - aTime;
+            });
+            
+            console.log('Total questions found:', questions.length);
+            return { success: true, questions };
+        } catch (error) {
+            console.error('Error in getQuestionsByUser:', error);
+            return { success: false, error: error.message };
+        }
     }
 };
 
@@ -260,6 +292,41 @@ export const answerService = {
             });
 
             return { success: true };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Get answers by user ID
+    async getAnswersByUser(userId) {
+        try {
+            const q = query(
+                collection(db, 'answers'),
+                where('authorId', '==', userId),
+                orderBy('createdAt', 'desc')
+            );
+            const querySnapshot = await getDocs(q);
+            const answers = [];
+            
+            // Get question titles for each answer
+            for (const docSnap of querySnapshot.docs) {
+                const answerData = { id: docSnap.id, ...docSnap.data() };
+                
+                // Get the question title
+                try {
+                    const questionRef = doc(db, 'questions', answerData.questionId);
+                    const questionSnap = await getDoc(questionRef);
+                    if (questionSnap.exists()) {
+                        answerData.questionTitle = questionSnap.data().title;
+                    }
+                } catch (error) {
+                    console.error('Error getting question title:', error);
+                }
+                
+                answers.push(answerData);
+            }
+            
+            return { success: true, answers };
         } catch (error) {
             return { success: false, error: error.message };
         }

@@ -290,7 +290,8 @@
         authService.onAuthStateChange((user) => {
             if (user) {
                 userNav.innerHTML = `
-                    <span>Welcome, ${user.email}</span>
+                    <span>Welcome, ${user.email.split('@')[0]}</span>
+                    <a href="profile.html" style="margin-left: 1rem; color: white; text-decoration: none;">Profile</a>
                     <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
                 `;
             } else {

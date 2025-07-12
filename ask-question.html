@@ -172,7 +172,7 @@
     </ul>
     </div>
 
-    <form>
+    <form id="questionForm">
     <div class="form-group">
         <label for="title">Question Title *</label>
         <input type="text" id="title" maxlength="200" placeholder="What do you want to ask?" />
@@ -245,6 +245,99 @@
     const index = tags.indexOf(tagToRemove);
     if (index > -1) tags.splice(index, 1);
     renderTags();
+    };
+</script>
+
+<script type="module">
+    import { authService, questionService } from './firebase-modern.js';
+    
+    const userNav = document.getElementById('userNav');
+    const questionForm = document.getElementById('questionForm');
+    let currentUser = null;
+    
+    // Check authentication
+    authService.onAuthStateChange((user) => {
+        currentUser = user;
+        if (user) {
+            userNav.innerHTML = `
+                <span style="color: #8b5cf6;">Welcome, ${user.email.split('@')[0]}</span>
+                <a href="profile.html" style="margin-left: 1rem; color: #8b5cf6;">Profile</a>
+                <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: #1f1f22; color: #8b5cf6; border: 1px solid #8b5cf6; border-radius: 3px; cursor: pointer;">Logout</button>
+            `;
+        } else {
+            userNav.innerHTML = `
+                <a href="login-modern.html" style="margin-right: 1rem; color: #8b5cf6;">Login</a>
+                <a href="signup-modern.html" style="color: #8b5cf6;">Sign Up</a>
+            `;
+            // Redirect to login if not authenticated
+            window.location.href = 'login-modern.html';
+        }
+    });
+    
+    // Form submission
+    questionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!currentUser) {
+            alert('Please log in to ask a question');
+            return;
+        }
+        
+        const title = document.getElementById('title').value.trim();
+        const content = document.getElementById('content').value.trim();
+        
+        if (!title || !content) {
+            alert('Please fill in both title and content');
+            return;
+        }
+        
+        if (title.length < 10) {
+            alert('Title must be at least 10 characters long');
+            return;
+        }
+        
+        if (content.length < 20) {
+            alert('Question details must be at least 20 characters long');
+            return;
+        }
+        
+        const submitBtn = questionForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        
+        try {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Posting...';
+            
+            const questionData = {
+                title: title,
+                content: content,
+                tags: tags,
+                authorId: currentUser.uid,
+                authorName: currentUser.email.split('@')[0]
+            };
+            
+            console.log('Submitting question:', questionData);
+            const result = await questionService.createQuestion(questionData);
+            
+            if (result.success) {
+                alert('Question posted successfully!');
+                window.location.href = `question.html?id=${result.id}`;
+            } else {
+                alert('Failed to post question: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error posting question:', error);
+            alert('An error occurred while posting your question');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+    
+    // Make logout function global
+    window.logout = async () => {
+        await authService.logoutUser();
+        window.location.href = 'index.html';
     };
 </script>
 </body>

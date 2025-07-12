@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - StackIt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            color: #e2e8f0;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .profile-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .profile-header {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .avatar-upload {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: #6366f1;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .profile-email {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: 2px solid transparent;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-outline {
+            background: rgba(30, 41, 59, 0.8);
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-outline:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .profile-section {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .section-header {
+            padding: 2rem 2.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        .section-content {
+            padding: 1.5rem 2rem;
+        }
+        
+        .question-item, .answer-item {
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .question-item::before, .answer-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .question-item:hover, .answer-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .question-item:hover::before, .answer-item:hover::before {
+            opacity: 1;
+        }
+        
+        .question-item:last-child, .answer-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .item-title {
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            line-height: 1.4;
+        }
+        
+        .item-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .item-title a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        
+        .item-title a:hover {
+            color: #60a5fa;
+        }
+        
+        .item-title a:hover::after {
+            width: 100%;
+        }
+        
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 1rem;
+        }
+        
+        .item-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .stat-badge:hover::before {
+            left: 100%;
+        }
+        
+        .votes {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .answers {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+        }
+        
+        .views {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+        }
+        
+        .edit-profile-form {
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #f1f5f9;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            color: #f1f5f9;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            background: rgba(30, 41, 59, 0.8);
+            color: #f1f5f9;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #94a3b8;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+        
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .profile-actions {
+                justify-content: center;
+            }
+            
+            .profile-container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%); padding: 1.5rem 0; margin-bottom: 3rem; backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 1.8rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">StackIt</a>
+            <div style="display: flex; gap: 2rem; align-items: center;">
+                <a href="questions.html" style="color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; transition: color 0.3s ease;">Questions</a>
+                <a href="ask-question.html" style="color: rgba(255,255,255,0.9); text-decoration: none; font-weight: 500; transition: color 0.3s ease;">Ask Question</a>
+                <div id="userNav" style="color: white;"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div id="loadingMessage" class="loading">Loading profile...</div>
+        <div id="errorMessage" class="error" style="display: none;"></div>
+        <div id="successMessage" class="success" style="display: none;"></div>
+        
+        <div id="profileContent" style="display: none;">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">
+                    <span id="avatarLetter">?</span>
+                    <div class="avatar-upload" onclick="uploadAvatar()">📷</div>
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name" id="profileName">Loading...</h1>
+                    <p class="profile-email" id="profileEmail">Loading...</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="questionsCount">0</span>
+                            <span class="stat-label">Questions</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="answersCount">0</span>
+                            <span class="stat-label">Answers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="reputationCount">0</span>
+                            <span class="stat-label">Reputation</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="joinedDate">0</span>
+                            <span class="stat-label">Member Since</span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary" onclick="toggleEditMode()">Edit Profile</button>
+                        <a href="ask-question.html" class="btn btn-outline">Ask Question</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div id="editProfileForm" class="profile-section edit-profile-form">
+                <div class="section-header">
+                    <h2 class="section-title">Edit Profile</h2>
+                </div>
+                <div class="section-content">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label class="form-label" for="displayName">Display Name</label>
+                            <input type="text" id="displayName" class="form-input" placeholder="Enter your display name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="bio">Bio</label>
+                            <textarea id="bio" class="form-input form-textarea" placeholder="Tell us about yourself..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="location">Location</label>
+                            <input type="text" id="location" class="form-input" placeholder="City, Country">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="website">Website</label>
+                            <input type="url" id="website" class="form-input" placeholder="https://yourwebsite.com">
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="button" class="btn btn-outline" onclick="cancelEdit()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Questions -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Questions</h2>
+                    <a href="ask-question.html" class="btn btn-primary">Ask New Question</a>
+                </div>
+                <div class="section-content">
+                    <div id="userQuestions">
+                        <div class="loading">Loading questions...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Answers -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Answers</h2>
+                </div>
+                <div class="section-content">
+                    <div id="userAnswers">
+                        <div class="loading">Loading answers...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService, answerService } from './firebase-modern.js';
+        
+        let currentUser = null;
+        let userProfile = null;
+        
+        // DOM elements
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const profileContent = document.getElementById('profileContent');
+        const userNav = document.getElementById('userNav');
+        
+        // Check authentication
+        authService.onAuthStateChange(async (user) => {
+            if (user) {
+                currentUser = user;
+                userNav.innerHTML = `
+                    <span>Welcome, ${user.email.split('@')[0]}</span>
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
+                `;
+                await loadProfile();
+            } else {
+                userNav.innerHTML = `
+                    <a href="login-modern.html" style="color: white; text-decoration: none; margin-right: 1rem;">Login</a>
+                    <a href="signup-modern.html" style="color: white; text-decoration: none;">Sign Up</a>
+                `;
+                window.location.href = 'login-modern.html';
+            }
+        });
+        
+        async function loadProfile() {
+            try {
+                loadingMessage.style.display = 'block';
+                profileContent.style.display = 'none';
+                
+                // Get user profile data (you might want to store additional profile info in Firestore)
+                const userEmail = currentUser.email;
+                const userName = userEmail.split('@')[0];
+                const joinedDate = currentUser.metadata.creationTime ? 
+                    new Date(currentUser.metadata.creationTime).getFullYear() : 
+                    new Date().getFullYear();
+                
+                // Display basic profile info
+                document.getElementById('profileName').textContent = userName;
+                document.getElementById('profileEmail').textContent = userEmail;
+                document.getElementById('avatarLetter').textContent = userName.charAt(0).toUpperCase();
+                document.getElementById('joinedDate').textContent = joinedDate;
+                
+                // Load user's questions and answers
+                await Promise.all([
+                    loadUserQuestions(),
+                    loadUserAnswers()
+                ]);
+                
+                profileContent.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showError('Failed to load profile');
+            } finally {
+                loadingMessage.style.display = 'none';
+            }
+        }
+        
+        async function loadUserQuestions() {
+            try {
+                const questionsContainer = document.getElementById('userQuestions');
+                console.log('Loading questions for user:', currentUser.uid);
+                
+                questionsContainer.innerHTML = '<div class="loading">Loading questions...</div>';
+                
+                const result = await questionService.getQuestionsByUser(currentUser.uid);
+                console.log('Questions result:', result);
+                
+                if (result.success) {
+                    if (result.questions.length > 0) {
+                        document.getElementById('questionsCount').textContent = result.questions.length;
+                        
+                        questionsContainer.innerHTML = result.questions.map(question => {
+                            console.log('Processing question:', question);
+                            
+                            // Handle different date formats
+                            let createdAt;
+                            if (question.createdAt?.toDate) {
+                                createdAt = question.createdAt.toDate();
+                            } else if (question.createdAt) {
+                                createdAt = new Date(question.createdAt);
+                            } else {
+                                createdAt = new Date();
+                            }
+                            
+                            return `
+                                <div class="question-item">
+                                    <div class="item-title">
+                                        <a href="question.html?id=${question.id}">${escapeHtml(question.title || 'Untitled Question')}</a>
+                                    </div>
+                                    <div class="item-meta">
+                                        <div class="item-stats">
+                                            <span class="stat-badge votes">${question.votes || 0} votes</span>
+                                            <span class="stat-badge answers">${question.answers || 0} answers</span>
+                                            <span class="stat-badge views">${question.views || 0} views</span>
+                                        </div>
+                                        <span>Asked ${getTimeAgo(createdAt)}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        document.getElementById('questionsCount').textContent = '0';
+                        questionsContainer.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-icon">❓</div>
+                                <p>You haven't asked any questions yet.</p>
+                                <a href="ask-question.html" class="btn btn-primary">Ask Your First Question</a>
+                            </div>
+                        `;
+                    }
+                } else {
+                    console.error('Failed to load questions:', result.error);
+                    questionsContainer.innerHTML = `
+                        <div class="error">
+                            Failed to load questions: ${result.error}
+                            <br><br>
+                            <button class="btn btn-primary" onclick="loadUserQuestions()">Try Again</button>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading user questions:', error);
+                document.getElementById('userQuestions').innerHTML = `
+                    <div class="error">
+                        Error loading questions: ${error.message}
+                        <br><br>
+                        <button class="btn btn-primary" onclick="loadUserQuestions()">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+        
+        async function loadUserAnswers() {
+            try {
+                const answersContainer = document.getElementById('userAnswers');
+                const result = await answerService.getAnswersByUser(currentUser.uid);
+                
+                if (result.success && result.answers.length > 0) {
+                    document.getElementById('answersCount').textContent = result.answers.length;
+                    
+                    answersContainer.innerHTML = result.answers.map(answer => {
+                        const createdAt = answer.createdAt?.toDate ? 
+                            answer.createdAt.toDate() : 
+                            new Date(answer.createdAt);
+                            
+                        return `
+                            <div class="answer-item">
+                                <div class="item-title">
+                                    <a href="question.html?id=${answer.questionId}">Answer to: ${escapeHtml(answer.questionTitle || 'Question')}</a>
+                                </div>
+                                <div class="item-meta">
+                                    <span>Answered ${getTimeAgo(createdAt)}</span>
+                                    ${answer.isAccepted ? '<span style="color: #059669; font-weight: bold;">✓ Accepted</span>' : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    answersContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">💬</div>
+                            <p>You haven't answered any questions yet.</p>
+                            <a href="questions.html" class="btn btn-primary">Browse Questions</a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading user answers:', error);
+                document.getElementById('userAnswers').innerHTML = '<p class="error">Failed to load answers</p>';
+            }
+        }
+        
+        // Make functions global
+        window.logout = async () => {
+            await authService.logoutUser();
+            window.location.href = 'index.html';
+        };
+        
+        window.loadUserQuestions = loadUserQuestions;
+        
+        window.toggleEditMode = () => {
+            const form = document.getElementById('editProfileForm');
+            const isHidden = form.style.display === 'none' || !form.style.display;
+            form.style.display = isHidden ? 'block' : 'none';
+            
+            if (isHidden) {
+                // Pre-fill form with current data
+                document.getElementById('displayName').value = document.getElementById('profileName').textContent;
+            }
+        };
+        
+        window.cancelEdit = () => {
+            document.getElementById('editProfileForm').style.display = 'none';
+        };
+        
+        window.uploadAvatar = () => {
+            alert('Avatar upload feature coming soon!');
+        };
+        
+        // Profile form submission
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const displayName = document.getElementById('displayName').value.trim();
+            if (displayName) {
+                document.getElementById('profileName').textContent = displayName;
+                showSuccess('Profile updated successfully!');
+                document.getElementById('editProfileForm').style.display = 'none';
+            }
+        });
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+        
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+            return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
