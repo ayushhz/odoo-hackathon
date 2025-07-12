@@ -1,1 +1,265 @@
-hahaha ayuush
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StackIt - A Minimal Q&A Forum Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>StackIt</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <button class="btn btn-outline">Login</button>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    A Minimal Q&A Forum Platform for 
+                    <span class="gradient-text">Collaborative Learning</span>
+                </h1>
+                <p class="hero-description">
+                    StackIt supports structured knowledge sharing in a simple, user-friendly environment. 
+                    Ask questions, share knowledge, and build a community focused on learning.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large">Get Started</button>
+                    <button class="btn btn-outline btn-large">Ask New Question</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="forum-preview">
+                    <div class="forum-header">
+                        <div class="forum-logo">StackIt</div>
+                        <div class="forum-login">Login</div>
+                    </div>
+                    <div class="forum-toolbar">
+                        <div class="ask-btn">Ask New question</div>
+                        <div class="search-bar">
+                            <input type="text" placeholder="Search">
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-content">
+                            <h4>How to join 2 columns in a data set to make a separate column in SQL</h4>
+                            <div class="question-meta">
+                                <span class="user-badge vital-elephant">Vital Elephant</span>
+                                <span class="answer-count">5 ans</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-item">
+                        <div class="question-content">
+                            <h4>Question.....</h4>
+                            <div class="question-meta">
+                                <span class="user-badge delightful-boar">Delightful Boar</span>
+                                <span class="answer-count">3 ans</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Core Features</h2>
+                <p class="section-description">Everything you need for a thriving Q&A community</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Ask Questions</h3>
+                    <p>Submit new questions with rich text formatting, relevant tags, and detailed descriptions to get the help you need.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Rich Text Editor</h3>
+                    <p>Format your questions and answers with bold, italic, lists, links, images, and more using our intuitive editor.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 10V12H8V10H7ZM8 10H9V8H8V10ZM8 12V14H9V12H8Z" fill="currentColor"/>
+                            <path d="M12 6L13 7H20C20.5523 7 21 7.44772 21 8V18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18V6C3 5.44772 3.44772 5 4 5H11L12 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Voting System</h3>
+                    <p>Upvote helpful answers and downvote low-quality content. Question owners can mark the best answer as accepted.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 8C18 6.17 16.83 5 15 5H9C7.17 5 6 6.17 6 8C6 9.83 7.17 11 9 11H15C16.83 11 18 9.83 18 8ZM16 8C16 8.55 15.55 9 15 9H9C8.45 9 8 8.55 8 8C8 7.45 8.45 7 9 7H15C15.55 7 16 7.45 16 8Z" fill="currentColor"/>
+                            <path d="M6 15C6 13.17 7.17 12 9 12H15C16.83 12 18 13.17 18 15C18 16.83 16.83 18 15 18H9C7.17 18 6 16.83 6 15ZM8 15C8 15.55 8.45 16 9 16H15C15.55 16 16 15.55 16 15C16 14.45 15.55 14 15 14H9C8.45 14 8 14.45 8 15Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3>Smart Tagging</h3>
+                    <p>Organize questions with relevant tags like React, JavaScript, or Python for easy discovery and filtering.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 8C20.209 8 22 6.209 22 4C22 1.791 20.209 0 18 0C15.791 0 14 1.791 14 4C14 6.209 15.791 8 18 8Z" fill="currentColor"/>
+                            <path d="M6 15L1 20L4 22L6 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13 3L15.5 10.5L22 13L15.5 15.5L13 23L10.5 15.5L4 13L10.5 10.5L13 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Notifications</h3>
+                    <p>Stay updated when someone answers your question, comments on your posts, or mentions you in discussions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 11L19 13L23 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>User Roles</h3>
+                    <p>Flexible permission system with Guest, User, and Admin roles to maintain community standards and moderation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Built for Collaborative Learning</h2>
+                    <p>StackIt is designed to be simple, user-friendly, and focused on the core experience of asking and answering questions within a community. Whether you're a beginner seeking help or an expert sharing knowledge, our platform provides the tools you need.</p>
+                    
+                    <div class="user-roles">
+                        <h3>User Roles & Permissions</h3>
+                        <div class="roles-table">
+                            <div class="role-row">
+                                <div class="role-name">Guest</div>
+                                <div class="role-permissions">View all questions and answers</div>
+                            </div>
+                            <div class="role-row">
+                                <div class="role-name">User</div>
+                                <div class="role-permissions">Register, log in, post questions/answers, vote</div>
+                            </div>
+                            <div class="role-row">
+                                <div class="role-name">Admin</div>
+                                <div class="role-permissions">Moderate content</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-label">Questions Asked</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">300+</div>
+                            <div class="stat-label">Answers Posted</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">25+</div>
+                            <div class="stat-label">Topics Covered</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Start Learning?</h2>
+                <p>Join our community and start asking questions, sharing knowledge, and collaborating with others.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-large">Create Account</button>
+                    <button class="btn btn-outline btn-large">Browse Questions</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>StackIt</h3>
+                    <p>A minimal Q&A forum platform for collaborative learning and structured knowledge sharing.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Platform</h4>
+                        <a href="#">Features</a>
+                        <a href="#">About</a>
+                        <a href="#">Community</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Guidelines</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy</a>
+                        <a href="#">Terms</a>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 StackIt. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
