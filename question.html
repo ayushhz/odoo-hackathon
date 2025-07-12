@@ -6,14 +6,22 @@
     <title>Question - StackIt</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
         .question-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 20px auto;
             padding: 0 2rem;
         }
         
         .question-header {
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #334155;
             padding-bottom: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -21,7 +29,7 @@
         .question-title {
             font-size: 1.875rem;
             font-weight: 600;
-            color: #1f2937;
+            color: #f1f5f9;
             margin-bottom: 1rem;
             line-height: 1.3;
         }
@@ -29,7 +37,7 @@
         .question-meta {
             display: flex;
             gap: 2rem;
-            color: #6b7280;
+            color: #94a3b8;
             font-size: 0.875rem;
         }
         
@@ -42,32 +50,37 @@
         .stat {
             text-align: center;
             padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            background: rgba(51, 65, 85, 0.3);
+            border: 1px solid #475569;
+            border-radius: 12px;
             min-width: 80px;
+            backdrop-filter: blur(10px);
         }
         
         .stat-number {
             display: block;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #1f2937;
+            color: #8b5cf6;
         }
         
         .stat-label {
             font-size: 0.75rem;
-            color: #6b7280;
+            color: #94a3b8;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .question-content {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #475569;
+            border-radius: 16px;
             padding: 2rem;
             margin-bottom: 2rem;
             line-height: 1.6;
             white-space: pre-wrap;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .question-tags {
@@ -78,12 +91,13 @@
         }
         
         .tag {
-            background: #e0e7ff;
-            color: #3730a3;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
             font-size: 0.875rem;
             font-weight: 500;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
         
         .question-author {
@@ -92,7 +106,7 @@
             align-items: center;
             margin-top: 1.5rem;
             padding-top: 1rem;
-            border-top: 1px solid #f3f4f6;
+            border-top: 1px solid #475569;
         }
         
         .author-info {
@@ -105,12 +119,13 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #6366f1;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
         
         .author-details {
@@ -120,12 +135,12 @@
         
         .author-name {
             font-weight: 600;
-            color: #1f2937;
+            color: #f1f5f9;
         }
         
         .author-date {
             font-size: 0.875rem;
-            color: #6b7280;
+            color: #94a3b8;
         }
         
         .vote-buttons {
@@ -136,8 +151,8 @@
         }
         
         .vote-btn {
-            background: #f3f4f6;
-            border: 1px solid #d1d5db;
+            background: rgba(51, 65, 85, 0.4);
+            border: 1px solid #475569;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -146,21 +161,27 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            color: #94a3b8;
+            backdrop-filter: blur(10px);
         }
         
         .vote-btn:hover {
-            background: #e5e7eb;
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+            transform: translateY(-2px);
         }
         
         .vote-btn.voted {
-            background: #6366f1;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
+            border-color: #8b5cf6;
         }
         
         .vote-count {
             font-weight: bold;
             font-size: 1.25rem;
-            color: #1f2937;
+            color: #f1f5f9;
         }
         
         .answers-section {
@@ -173,27 +194,30 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #334155;
         }
         
         .answers-count {
             font-size: 1.25rem;
             font-weight: 600;
-            color: #1f2937;
+            color: #f1f5f9;
         }
         
         .answer-item {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #475569;
+            border-radius: 16px;
             padding: 2rem;
             margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .answer-content {
             line-height: 1.6;
             margin-bottom: 1.5rem;
             white-space: pre-wrap;
+            color: #e2e8f0;
         }
         
         .answer-meta {
@@ -201,41 +225,45 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 1rem;
-            border-top: 1px solid #f3f4f6;
+            border-top: 1px solid #475569;
         }
         
         .accepted-answer {
-            border-left: 4px solid #059669;
-            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            background: rgba(16, 185, 129, 0.1);
         }
         
         .accept-btn {
-            background: #059669;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
             padding: 0.5rem 1rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 0.875rem;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
         
         .accept-btn:hover {
-            background: #047857;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
         }
         
         .answer-form {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #475569;
+            border-radius: 16px;
             padding: 2rem;
             margin-top: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .answer-form h3 {
             margin-top: 0;
             margin-bottom: 1rem;
-            color: #1f2937;
+            color: #f1f5f9;
         }
         
         .form-group {
@@ -246,91 +274,157 @@
             width: 100%;
             min-height: 150px;
             padding: 0.75rem;
-            border: 1px solid #d1d5db;
-            border-radius: 5px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #475569;
+            border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
             resize: vertical;
+            color: #e2e8f0;
+            backdrop-filter: blur(10px);
         }
         
         .form-group textarea:focus {
             outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        
+        .form-group textarea::placeholder {
+            color: #94a3b8;
         }
         
         .btn {
-            background: #6366f1;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
         
         .btn:hover {
-            background: #5147eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
         }
         
         .btn:disabled {
-            background: #9ca3af;
+            background: #64748b;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .back-link {
             display: inline-block;
             margin-bottom: 1rem;
-            color: #6366f1;
+            color: #8b5cf6;
             text-decoration: none;
             font-weight: 500;
+            transition: color 0.3s ease;
         }
         
         .back-link:hover {
+            color: #a78bfa;
             text-decoration: underline;
         }
         
         .loading {
             text-align: center;
             padding: 3rem;
-            color: #6b7280;
+            color: #94a3b8;
         }
         
         .error-message {
-            background: #fee2e2;
-            color: #dc2626;
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: 12px;
             margin-bottom: 1rem;
             text-align: center;
+            border: 1px solid #dc2626;
         }
         
         .login-required {
-            background: #fef3c7;
-            color: #92400e;
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: 12px;
             text-align: center;
             margin-bottom: 1rem;
+            border: 1px solid #f59e0b;
         }
         
         .login-required a {
-            color: #6366f1;
+            color: #8b5cf6;
             text-decoration: none;
             font-weight: 600;
         }
         
         .login-required a:hover {
+            color: #a78bfa;
             text-decoration: underline;
+        }
+        
+        /* Navigation styles */
+        nav {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #475569;
+        }
+        
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        nav .logo {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav .user-nav {
+            color: #e2e8f0;
+        }
+        
+        nav .user-nav a {
+            color: #e2e8f0;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+        
+        nav .user-nav button {
+            margin-left: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(139, 92, 246, 0.2);
+            color: #e2e8f0;
+            border: 1px solid #8b5cf6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        nav .user-nav button:hover {
+            background: rgba(139, 92, 246, 0.3);
         }
     </style>
 </head>
 <body>
-    <nav style="background: #6366f1; padding: 1rem 0; margin-bottom: 2rem;">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
-            <a href="index.html" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold;">StackIt</a>
-            <div id="userNav" style="color: white;"></div>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">StackIt</a>
+            <div id="userNav" class="user-nav"></div>
         </div>
     </nav>
 
@@ -441,16 +535,21 @@
             currentUser = user;
             if (user) {
                 userNav.innerHTML = `
+<<<<<<< HEAD
                     <span>Welcome, ${user.email.split('@')[0]}</span>
                     <a href="profile.html" style="margin-left: 1rem; color: white; text-decoration: none;">Profile</a>
                     <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
+=======
+                    <span>Welcome, ${user.email}</span>
+                    <button onclick="logout()">Logout</button>
+>>>>>>> 2bea64be5ba272fbb1a31aa934315cdf55c0e55d
                 `;
                 answerForm.style.display = 'block';
                 loginRequired.style.display = 'none';
             } else {
                 userNav.innerHTML = `
-                    <a href="login-modern.html" style="color: white; text-decoration: none; margin-right: 1rem;">Login</a>
-                    <a href="signup-modern.html" style="color: white; text-decoration: none;">Sign Up</a>
+                    <a href="login-modern.html">Login</a>
+                    <a href="signup-modern.html">Sign Up</a>
                 `;
                 answerForm.style.display = 'none';
                 loginRequired.style.display = 'block';
@@ -546,7 +645,7 @@
             const answersList = document.getElementById('answersList');
             
             if (answers.length === 0) {
-                answersList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No answers yet. Be the first to answer!</p>';
+                answersList.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 2rem;">No answers yet. Be the first to answer!</p>';
                 return;
             }
             
@@ -566,7 +665,7 @@
                                     <div class="author-date">Answered ${getTimeAgo(createdAt)}</div>
                                 </div>
                             </div>
-                            ${answer.isAccepted ? '<span style="color: #059669; font-weight: bold;">✓ Accepted Answer</span>' : ''}
+                            ${answer.isAccepted ? '<span style="color: #10b981; font-weight: bold;">✓ Accepted Answer</span>' : ''}
                         </div>
                     </div>
                 `;
