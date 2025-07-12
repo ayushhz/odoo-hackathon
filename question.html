@@ -586,16 +586,18 @@
         
         async function loadQuestion() {
             try {
+                console.log('Loading question with ID:', questionId);
                 loadingMessage.style.display = 'block';
                 questionContent.style.display = 'none';
                 answersSection.style.display = 'none';
                 
                 const result = await questionService.getQuestionById(questionId);
+                console.log('Question loaded:', result);
                 
                 if (result.success) {
                     currentQuestion = result.question;
                     displayQuestion(result.question);
-                    loadAnswers();
+                    await loadAnswers();
                 } else {
                     showError('Question not found');
                 }
@@ -670,11 +672,15 @@
         
         async function loadAnswers() {
             try {
+                console.log('Loading answers for question:', questionId);
                 const result = await answerService.getAnswersByQuestionId(questionId);
+                console.log('Answers loaded:', result);
                 
                 if (result.success) {
                     displayAnswers(result.answers);
                     document.getElementById('answersCount').textContent = result.answers.length;
+                } else {
+                    console.error('Failed to load answers:', result.error);
                 }
                 
                 answersSection.style.display = 'block';
@@ -684,13 +690,17 @@
         }
         
         function displayAnswers(answers) {
+            console.log('Displaying answers:', answers);
             const answersList = document.getElementById('answersList');
+            console.log('Answers list element:', answersList);
             
             if (answers.length === 0) {
+                console.log('No answers found, showing empty message');
                 answersList.innerHTML = '<p style="text-align: center; color: #94a3b8; padding: 2rem;">No answers yet. Be the first to answer!</p>';
                 return;
             }
             
+            console.log('Rendering', answers.length, 'answers');
             answersList.innerHTML = answers.map(answer => {
                 const authorInitial = answer.authorName ? answer.authorName.charAt(0).toUpperCase() : '?';
                 const createdAt = answer.createdAt?.toDate ? answer.createdAt.toDate() : new Date(answer.createdAt);
