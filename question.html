@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question - StackIt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .question-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 2rem;
+        }
+        
+        .question-header {
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .question-title {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .question-meta {
+            display: flex;
+            gap: 2rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .question-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+        
+        .question-content {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .question-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .question-author {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #6366f1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .author-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .author-date {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .vote-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .vote-btn {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .vote-btn:hover {
+            background: #e5e7eb;
+        }
+        
+        .vote-btn.voted {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .vote-count {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: #1f2937;
+        }
+        
+        .answers-section {
+            margin-top: 3rem;
+        }
+        
+        .answers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .answers-count {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .answer-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .answer-content {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            white-space: pre-wrap;
+        }
+        
+        .answer-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+        
+        .accepted-answer {
+            border-left: 4px solid #059669;
+            background: #f0fdf4;
+        }
+        
+        .accept-btn {
+            background: #059669;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .accept-btn:hover {
+            background: #047857;
+        }
+        
+        .answer-form {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .answer-form h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+        
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .btn {
+            background: #6366f1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5147eb;
+        }
+        
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .login-required {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .login-required a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .login-required a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: #6366f1; padding: 1rem 0; margin-bottom: 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold;">StackIt</a>
+            <div id="userNav" style="color: white;"></div>
+        </div>
+    </nav>
+
+    <div class="question-container">
+        <a href="questions.html" class="back-link">← Back to Questions</a>
+        
+        <div id="loadingMessage" class="loading">Loading question...</div>
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+        
+        <div id="questionContent" style="display: none;">
+            <div class="question-header">
+                <h1 id="questionTitle" class="question-title"></h1>
+                <div class="question-meta">
+                    <span id="questionDate"></span>
+                    <span id="questionViews"></span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 2rem;">
+                <div class="vote-buttons">
+                    <button class="vote-btn" id="upvoteBtn" onclick="voteQuestion(1)">▲</button>
+                    <span class="vote-count" id="voteCount">0</span>
+                    <button class="vote-btn" id="downvoteBtn" onclick="voteQuestion(-1)">▼</button>
+                </div>
+                
+                <div style="flex: 1;">
+                    <div class="question-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="votesDisplay">0</span>
+                            <span class="stat-label">votes</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="answersDisplay">0</span>
+                            <span class="stat-label">answers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="viewsDisplay">0</span>
+                            <span class="stat-label">views</span>
+                        </div>
+                    </div>
+                    
+                    <div class="question-content" id="questionBody"></div>
+                    
+                    <div class="question-tags" id="questionTags"></div>
+                    
+                    <div class="question-author">
+                        <div class="author-info">
+                            <div class="author-avatar" id="authorAvatar"></div>
+                            <div class="author-details">
+                                <div class="author-name" id="authorName"></div>
+                                <div class="author-date" id="authorDate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="answersSection" class="answers-section" style="display: none;">
+            <div class="answers-header">
+                <h2 class="answers-count"><span id="answersCount">0</span> Answers</h2>
+            </div>
+            
+            <div id="answersList"></div>
+            
+            <div id="answerForm" class="answer-form" style="display: none;">
+                <h3>Your Answer</h3>
+                <div class="form-group">
+                    <textarea 
+                        id="answerContent" 
+                        placeholder="Write your answer here..."
+                        required
+                    ></textarea>
+                </div>
+                <button id="submitAnswer" class="btn" onclick="submitAnswer()">
+                    <span id="submitText">Post Your Answer</span>
+                    <span id="submitSpinner" style="display: none;">Posting...</span>
+                </button>
+            </div>
+            
+            <div id="loginRequired" class="login-required" style="display: none;">
+                <p>You must be <a href="login-modern.html">logged in</a> to answer this question.</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService, answerService } from './firebase-modern.js';
+        
+        // Get question ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const questionId = urlParams.get('id');
+        
+        // DOM elements
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const questionContent = document.getElementById('questionContent');
+        const answersSection = document.getElementById('answersSection');
+        const answerForm = document.getElementById('answerForm');
+        const loginRequired = document.getElementById('loginRequired');
+        const userNav = document.getElementById('userNav');
+        
+        let currentUser = null;
+        let currentQuestion = null;
+        
+        // Check authentication
+        authService.onAuthStateChange((user) => {
+            currentUser = user;
+            if (user) {
+                userNav.innerHTML = `
+                    <span>Welcome, ${user.email}</span>
+                    <button onclick="logout()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
+                `;
+                answerForm.style.display = 'block';
+                loginRequired.style.display = 'none';
+            } else {
+                userNav.innerHTML = `
+                    <a href="login-modern.html" style="color: white; text-decoration: none; margin-right: 1rem;">Login</a>
+                    <a href="signup-modern.html" style="color: white; text-decoration: none;">Sign Up</a>
+                `;
+                answerForm.style.display = 'none';
+                loginRequired.style.display = 'block';
+            }
+        });
+        
+        // Make logout function global
+        window.logout = async () => {
+            await authService.logoutUser();
+            window.location.href = 'index.html';
+        };
+        
+        // Load question on page load
+        window.addEventListener('load', () => {
+            if (!questionId) {
+                showError('No question ID provided');
+                return;
+            }
+            loadQuestion();
+        });
+        
+        async function loadQuestion() {
+            try {
+                loadingMessage.style.display = 'block';
+                questionContent.style.display = 'none';
+                answersSection.style.display = 'none';
+                
+                const result = await questionService.getQuestionById(questionId);
+                
+                if (result.success) {
+                    currentQuestion = result.question;
+                    displayQuestion(result.question);
+                    loadAnswers();
+                } else {
+                    showError('Question not found');
+                }
+            } catch (error) {
+                console.error('Error loading question:', error);
+                showError('Failed to load question');
+            } finally {
+                loadingMessage.style.display = 'none';
+            }
+        }
+        
+        function displayQuestion(question) {
+            document.getElementById('questionTitle').textContent = question.title;
+            document.getElementById('questionBody').textContent = question.content;
+            
+            // Display tags
+            const tagsContainer = document.getElementById('questionTags');
+            if (question.tags && question.tags.length > 0) {
+                tagsContainer.innerHTML = question.tags.map(tag => 
+                    `<span class="tag">${escapeHtml(tag)}</span>`
+                ).join('');
+            }
+            
+            // Display author info
+            const authorInitial = question.authorName ? question.authorName.charAt(0).toUpperCase() : '?';
+            document.getElementById('authorAvatar').textContent = authorInitial;
+            document.getElementById('authorName').textContent = question.authorName;
+            
+            // Display date
+            const createdAt = question.createdAt?.toDate ? question.createdAt.toDate() : new Date(question.createdAt);
+            document.getElementById('authorDate').textContent = `Asked ${getTimeAgo(createdAt)}`;
+            document.getElementById('questionDate').textContent = `Asked ${getTimeAgo(createdAt)}`;
+            
+            // Display stats
+            document.getElementById('voteCount').textContent = question.votes || 0;
+            document.getElementById('votesDisplay').textContent = question.votes || 0;
+            document.getElementById('answersDisplay').textContent = question.answers || 0;
+            document.getElementById('viewsDisplay').textContent = question.views || 0;
+            document.getElementById('questionViews').textContent = `${question.views || 0} views`;
+            
+            questionContent.style.display = 'block';
+        }
+        
+        async function loadAnswers() {
+            try {
+                const result = await answerService.getAnswersByQuestionId(questionId);
+                
+                if (result.success) {
+                    displayAnswers(result.answers);
+                    document.getElementById('answersCount').textContent = result.answers.length;
+                }
+                
+                answersSection.style.display = 'block';
+            } catch (error) {
+                console.error('Error loading answers:', error);
+            }
+        }
+        
+        function displayAnswers(answers) {
+            const answersList = document.getElementById('answersList');
+            
+            if (answers.length === 0) {
+                answersList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 2rem;">No answers yet. Be the first to answer!</p>';
+                return;
+            }
+            
+            answersList.innerHTML = answers.map(answer => {
+                const authorInitial = answer.authorName ? answer.authorName.charAt(0).toUpperCase() : '?';
+                const createdAt = answer.createdAt?.toDate ? answer.createdAt.toDate() : new Date(answer.createdAt);
+                const acceptedClass = answer.isAccepted ? 'accepted-answer' : '';
+                
+                return `
+                    <div class="answer-item ${acceptedClass}">
+                        <div class="answer-content">${escapeHtml(answer.content)}</div>
+                        <div class="answer-meta">
+                            <div class="author-info">
+                                <div class="author-avatar">${authorInitial}</div>
+                                <div class="author-details">
+                                    <div class="author-name">${escapeHtml(answer.authorName)}</div>
+                                    <div class="author-date">Answered ${getTimeAgo(createdAt)}</div>
+                                </div>
+                            </div>
+                            ${answer.isAccepted ? '<span style="color: #059669; font-weight: bold;">✓ Accepted Answer</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Make functions global for onclick handlers
+        window.voteQuestion = voteQuestion;
+        window.submitAnswer = submitAnswer;
+        
+        async function voteQuestion(direction) {
+            if (!currentUser) {
+                alert('Please log in to vote');
+                return;
+            }
+            
+            // Voting functionality would be implemented here
+            alert('Voting feature coming soon!');
+        }
+        
+        async function submitAnswer() {
+            if (!currentUser) {
+                alert('Please log in to answer');
+                return;
+            }
+            
+            const content = document.getElementById('answerContent').value.trim();
+            if (!content) {
+                alert('Please enter your answer');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitAnswer');
+            const submitText = document.getElementById('submitText');
+            const submitSpinner = document.getElementById('submitSpinner');
+            
+            try {
+                submitBtn.disabled = true;
+                submitText.style.display = 'none';
+                submitSpinner.style.display = 'inline';
+                
+                const answerData = {
+                    content: content,
+                    questionId: questionId,
+                    authorId: currentUser.uid,
+                    authorName: currentUser.email
+                };
+                
+                const result = await answerService.createAnswer(answerData);
+                
+                if (result.success) {
+                    document.getElementById('answerContent').value = '';
+                    loadAnswers(); // Reload answers
+                    alert('Answer posted successfully!');
+                } else {
+                    alert('Failed to post answer: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error posting answer:', error);
+                alert('An error occurred while posting your answer');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                submitSpinner.style.display = 'none';
+            }
+        }
+        
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            loadingMessage.style.display = 'none';
+        }
+        
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+            return `${Math.floor(diffInSeconds / 31536000)} years ago`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

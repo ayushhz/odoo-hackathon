@@ -25,8 +25,8 @@ const loginButton = document.querySelector('#loginBtn');
 if (loginButton) {
     loginButton.addEventListener('click', function(e) {
         e.preventDefault();
-        console.log('Login button clicked - navigating to login.html');
-        window.location.href = 'login.html';
+        console.log('Login button clicked - navigating to login-modern.html');
+        window.location.href = 'login-modern.html';
     });
 }
 
@@ -35,8 +35,8 @@ const signupButton = document.querySelector('#signupBtn');
 if (signupButton) {
     signupButton.addEventListener('click', function(e) {
         e.preventDefault();
-        console.log('Sign Up button clicked - navigating to signup.html');
-        window.location.href = 'signup.html';
+        console.log('Sign Up button clicked - navigating to signup-modern.html');
+        window.location.href = 'signup-modern.html';
     });
 }
 
@@ -96,12 +96,12 @@ document.querySelectorAll('.btn').forEach(button => {
         
         if (buttonText === 'Login') {
             e.preventDefault();
-            window.location.href = 'login.html';
+            window.location.href = 'login-modern.html';
             return;
         }
         if (buttonText === 'Sign Up' || buttonText === 'Create Account' || buttonText === 'Get Started') {
             e.preventDefault();
-            window.location.href = 'signup.html';
+            window.location.href = 'signup-modern.html';
             return;
         }
         

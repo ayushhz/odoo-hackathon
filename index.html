@@ -6,6 +6,59 @@
     <title>StackIt - A Minimal Q&A Forum Platform</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        #userMenu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        #welcomeUser {
+            color: #6366f1;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        #logoutBtn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #6366f1;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        #logoutBtn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        #authButtons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            #userMenu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            #welcomeUser {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            #logoutBtn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -18,8 +71,15 @@
                 <a href="#features" class="nav-link">Features</a>
                 <a href="questions.html" class="nav-link">Questions</a>
                 <a href="#about" class="nav-link">About</a>
-                <a href="login.html" class="btn btn-outline">Login</a>
-                <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                <div id="authButtons">
+                    <a href="login-modern.html" class="btn btn-outline">Login</a>
+                    <a href="signup-modern.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <div id="userMenu" style="display: none;">
+                    <span id="welcomeUser" class="nav-link"></span>
+                    <a href="ask-question.html" class="btn btn-primary">Ask Question</a>
+                    <button id="logoutBtn" class="btn btn-outline">Logout</button>
+                </div>
             </div>
             <div class="hamburger">
                 <span></span>
@@ -260,14 +320,50 @@
         </div>
     </footer>
 
-    <!-- Firebase CDN Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage-compat.js"></script>
-    
-    <script src="firebase-config.js"></script>
-    <script src="firebase-app.js"></script>
+    <!-- Remove Firebase scripts - using modern ES6 modules instead -->
     <script src="script.js"></script>
+    
+    <!-- Authentication state management -->
+    <script type="module">
+        import { authService } from './firebase-modern.js';
+        
+        const authButtons = document.getElementById('authButtons');
+        const userMenu = document.getElementById('userMenu');
+        const welcomeUser = document.getElementById('welcomeUser');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        // Listen for authentication state changes
+        authService.onAuthStateChange((user) => {
+            if (user) {
+                // User is logged in
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userMenu.style.alignItems = 'center';
+                userMenu.style.gap = '1rem';
+                
+                // Extract username from email (part before @)
+                const username = user.email.split('@')[0];
+                welcomeUser.textContent = `Welcome, ${username}`;
+                welcomeUser.style.color = '#6366f1';
+                welcomeUser.style.fontWeight = '500';
+            } else {
+                // User is not logged in
+                authButtons.style.display = 'flex';
+                authButtons.style.gap = '1rem';
+                userMenu.style.display = 'none';
+            }
+        });
+        
+        // Logout functionality
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await authService.logoutUser();
+                // No need to manually update UI - onAuthStateChange will handle it
+            } catch (error) {
+                console.error('Error logging out:', error);
+                alert('Error logging out. Please try again.');
+            }
+        });
+    </script>
 </body>
 </html>
