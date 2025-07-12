@@ -258,10 +258,10 @@ export const answerService = {
     // Get answers for a question
     async getAnswersByQuestionId(questionId) {
         try {
+            // First try with simple ordering to avoid composite index issues
             const q = query(
                 collection(db, 'answers'),
                 where('questionId', '==', questionId),
-                orderBy('votes', 'desc'),
                 orderBy('createdAt', 'asc')
             );
             const querySnapshot = await getDocs(q);
@@ -269,9 +269,33 @@ export const answerService = {
             querySnapshot.forEach((doc) => {
                 answers.push({ id: doc.id, ...doc.data() });
             });
+            
+            // Sort by votes in memory to avoid composite index requirement
+            answers.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+            
             return { success: true, answers };
         } catch (error) {
-            return { success: false, error: error.message };
+            console.error('Error in getAnswersByQuestionId:', error);
+            
+            // Fallback: try without any ordering
+            try {
+                const q = query(
+                    collection(db, 'answers'),
+                    where('questionId', '==', questionId)
+                );
+                const querySnapshot = await getDocs(q);
+                const answers = [];
+                querySnapshot.forEach((doc) => {
+                    answers.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Sort by votes in memory
+                answers.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+                
+                return { success: true, answers };
+            } catch (fallbackError) {
+                return { success: false, error: fallbackError.message };
+            }
         }
     },
 

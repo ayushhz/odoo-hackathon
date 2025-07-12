@@ -693,6 +693,24 @@
                 if (result.success) {
                     displayAnswers(result.answers);
                     document.getElementById('answersCount').textContent = result.answers.length;
+                    
+                    // Check for answer count inconsistency and repair it
+                    const actualAnswerCount = result.answers.length;
+                    const displayedAnswerCount = parseInt(document.getElementById('answersDisplay').textContent) || 0;
+                    
+                    if (actualAnswerCount !== displayedAnswerCount) {
+                        console.log(`Answer count mismatch detected. Displayed: ${displayedAnswerCount}, Actual: ${actualAnswerCount}`);
+                        // Update the question stats to match actual answer count
+                        document.getElementById('answersDisplay').textContent = actualAnswerCount;
+                        
+                        // Optionally, repair the database
+                        try {
+                            await questionService.updateQuestion(questionId, { answers: actualAnswerCount });
+                            console.log('Question answer count repaired in database');
+                        } catch (error) {
+                            console.error('Failed to repair answer count in database:', error);
+                        }
+                    }
                 } else {
                     console.error('Failed to load answers:', result.error);
                 }

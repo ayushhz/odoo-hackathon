@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Permission Test</title>
+    <style>
+        body {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+        }
+        .test-section {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid #475569;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            background: #7c3aed;
+        }
+        .success {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .error {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        pre {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 Firebase Permission Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Authentication Status</h2>
+        <button class="btn" onclick="checkAuth()">Check Authentication</button>
+        <div id="authStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Read Questions Permission</h2>
+        <button class="btn" onclick="testReadQuestions()">Test Read Questions</button>
+        <div id="questionsResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Read Answers Permission</h2>
+        <button class="btn" onclick="testReadAnswers()">Test Read Answers</button>
+        <div id="answersResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Write Permission Test</h2>
+        <button class="btn" onclick="testWritePermission()">Test Write Permission</button>
+        <div id="writeResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Quick Login</h2>
+        <input type="email" id="email" placeholder="Email" style="padding: 0.5rem; margin: 0.5rem; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0;">
+        <input type="password" id="password" placeholder="Password" style="padding: 0.5rem; margin: 0.5rem; border-radius: 4px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0;">
+        <button class="btn" onclick="quickLogin()">Login</button>
+        <button class="btn" onclick="logout()" style="background: #ef4444;">Logout</button>
+        <div id="loginResult"></div>
+    </div>
+
+    <script type="module">
+        import { authService, questionService, answerService } from './firebase-modern.js';
+        
+        let currentUser = null;
+        
+        // Monitor auth state
+        authService.onAuthStateChange((user) => {
+            currentUser = user;
+            updateAuthDisplay();
+        });
+        
+        function updateAuthDisplay() {
+            const authStatus = document.getElementById('authStatus');
+            if (currentUser) {
+                authStatus.innerHTML = `<div class="success">✅ Logged in as: ${currentUser.email}</div>`;
+            } else {
+                authStatus.innerHTML = `<div class="error">❌ Not logged in</div>`;
+            }
+        }
+        
+        window.checkAuth = () => {
+            updateAuthDisplay();
+        };
+        
+        window.testReadQuestions = async () => {
+            const result = document.getElementById('questionsResult');
+            result.innerHTML = '<div>Testing...</div>';
+            
+            try {
+                const questions = await questionService.getAllQuestions();
+                if (questions.success) {
+                    result.innerHTML = `
+                        <div class="success">✅ SUCCESS: Read ${questions.questions.length} questions</div>
+                        <pre>${JSON.stringify(questions.questions.slice(0, 2), null, 2)}</pre>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="error">❌ FAILED: ${questions.error}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ ERROR: ${error.message}</div>`;
+            }
+        };
+        
+        window.testReadAnswers = async () => {
+            const result = document.getElementById('answersResult');
+            result.innerHTML = '<div>Testing...</div>';
+            
+            try {
+                const answers = await answerService.getAllAnswers();
+                if (answers.success) {
+                    result.innerHTML = `
+                        <div class="success">✅ SUCCESS: Read ${answers.answers.length} answers</div>
+                        <pre>${JSON.stringify(answers.answers.slice(0, 2), null, 2)}</pre>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="error">❌ FAILED: ${answers.error}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ ERROR: ${error.message}</div>`;
+            }
+        };
+        
+        window.testWritePermission = async () => {
+            const result = document.getElementById('writeResult');
+            result.innerHTML = '<div>Testing...</div>';
+            
+            if (!currentUser) {
+                result.innerHTML = '<div class="error">❌ Please login first to test write permissions</div>';
+                return;
+            }
+            
+            try {
+                // Test creating a dummy question
+                const testQuestion = {
+                    title: 'Test Question - Permission Check',
+                    content: 'This is a test question to check write permissions.',
+                    tags: ['test'],
+                    authorId: currentUser.uid,
+                    authorName: currentUser.email.split('@')[0]
+                };
+                
+                const questionResult = await questionService.createQuestion(testQuestion);
+                
+                if (questionResult.success) {
+                    result.innerHTML = `
+                        <div class="success">✅ SUCCESS: Write permission works</div>
+                        <div>Created test question with ID: ${questionResult.id}</div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="error">❌ FAILED: ${questionResult.error}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ ERROR: ${error.message}</div>`;
+            }
+        };
+        
+        window.quickLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const result = document.getElementById('loginResult');
+            
+            if (!email || !password) {
+                result.innerHTML = '<div class="error">Please enter email and password</div>';
+                return;
+            }
+            
+            try {
+                const loginResult = await authService.loginUser(email, password);
+                if (loginResult.success) {
+                    result.innerHTML = '<div class="success">✅ Login successful!</div>';
+                } else {
+                    result.innerHTML = `<div class="error">❌ Login failed: ${loginResult.error}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        };
+        
+        window.logout = async () => {
+            try {
+                await authService.logoutUser();
+                document.getElementById('loginResult').innerHTML = '<div class="success">✅ Logged out</div>';
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = `<div class="error">❌ Logout error: ${error.message}</div>`;
+            }
+        };
+        
+        // Auto-check auth on load
+        window.addEventListener('load', () => {
+            setTimeout(updateAuthDisplay, 1000);
+        });
+    </script>
+</body>
+</html>

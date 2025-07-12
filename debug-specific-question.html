@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Specific Question</title>
+    <style>
+        body {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+        }
+        .debug-section {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid #475569;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            background: #7c3aed;
+        }
+        pre {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Debug Specific Question</h1>
+    
+    <div class="debug-section">
+        <h2>Question ID from URL</h2>
+        <div id="questionIdDisplay"></div>
+        <button class="btn" onclick="getQuestionId()">Get Question ID</button>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Question Data</h2>
+        <button class="btn" onclick="loadQuestionData()">Load Question Data</button>
+        <pre id="questionData"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Answers Data</h2>
+        <button class="btn" onclick="loadAnswersData()">Load Answers Data</button>
+        <pre id="answersData"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h2>All Answers in Database</h2>
+        <button class="btn" onclick="loadAllAnswers()">Load All Answers</button>
+        <pre id="allAnswersData"></pre>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Repair Answer Count</h2>
+        <button class="btn" onclick="repairAnswerCount()">Repair Answer Count Inconsistency</button>
+        <pre id="repairResult"></pre>
+    </div>
+
+    <script type="module">
+        import { questionService, answerService } from './firebase-modern.js';
+        
+        let currentQuestionId = null;
+        let currentQuestionData = null;
+        let currentAnswersData = null;
+        
+        window.getQuestionId = () => {
+            // Try to get from URL first
+            const urlParams = new URLSearchParams(window.location.search);
+            let questionId = urlParams.get('id');
+            
+            if (!questionId) {
+                // If not in URL, try the one from the screenshot
+                questionId = prompt('Enter Question ID (the one showing "1 ANSWERS"):');
+            }
+            
+            currentQuestionId = questionId;
+            document.getElementById('questionIdDisplay').textContent = questionId || 'No ID found';
+        };
+        
+        window.loadQuestionData = async () => {
+            if (!currentQuestionId) {
+                alert('Please get question ID first');
+                return;
+            }
+            
+            try {
+                const result = await questionService.getQuestionById(currentQuestionId);
+                currentQuestionData = result;
+                document.getElementById('questionData').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('questionData').textContent = 'Error: ' + error.message;
+            }
+        };
+        
+        window.loadAnswersData = async () => {
+            if (!currentQuestionId) {
+                alert('Please get question ID first');
+                return;
+            }
+            
+            try {
+                const result = await answerService.getAnswersByQuestionId(currentQuestionId);
+                currentAnswersData = result;
+                document.getElementById('answersData').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('answersData').textContent = 'Error: ' + error.message;
+            }
+        };
+        
+        window.loadAllAnswers = async () => {
+            try {
+                const result = await answerService.getAllAnswers();
+                document.getElementById('allAnswersData').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('allAnswersData').textContent = 'Error: ' + error.message;
+            }
+        };
+        
+        window.repairAnswerCount = async () => {
+            if (!currentQuestionId) {
+                alert('Please load question data first');
+                return;
+            }
+            
+            try {
+                // Load current data if not already loaded
+                if (!currentQuestionData) await loadQuestionData();
+                if (!currentAnswersData) await loadAnswersData();
+                
+                const questionAnswerCount = currentQuestionData.success ? (currentQuestionData.question.answers || 0) : 0;
+                const actualAnswerCount = currentAnswersData.success ? currentAnswersData.answers.length : 0;
+                
+                const repairInfo = {
+                    questionId: currentQuestionId,
+                    questionAnswerCount: questionAnswerCount,
+                    actualAnswerCount: actualAnswerCount,
+                    needsRepair: questionAnswerCount !== actualAnswerCount
+                };
+                
+                if (repairInfo.needsRepair) {
+                    // Repair the question document
+                    const updateResult = await questionService.updateQuestion(currentQuestionId, { 
+                        answers: actualAnswerCount 
+                    });
+                    repairInfo.repairResult = updateResult;
+                    repairInfo.message = `Repaired! Updated question answer count from ${questionAnswerCount} to ${actualAnswerCount}`;
+                } else {
+                    repairInfo.message = 'No repair needed - counts already match';
+                }
+                
+                document.getElementById('repairResult').textContent = JSON.stringify(repairInfo, null, 2);
+                
+            } catch (error) {
+                document.getElementById('repairResult').textContent = 'Error: ' + error.message;
+            }
+        };
+        
+        // Auto-get question ID on load
+        window.addEventListener('load', () => {
+            getQuestionId();
+        });
+    </script>
+</body>
+</html>
