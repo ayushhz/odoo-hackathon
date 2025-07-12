@@ -7,147 +7,284 @@
 <link rel="stylesheet" href="styles.css" />
 <style>
     body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0f0f11;
-    color: #f3f4f6;
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e40af 100%);
+        color: #e2e8f0;
+        min-height: 100vh;
     }
 
     a {
-    color: #8b5cf6;
-    text-decoration: none;
+        color: #a78bfa;
+        text-decoration: none;
+        transition: all 0.3s ease;
     }
 
     a:hover {
-    text-decoration: underline;
+        color: #c4b5fd;
     }
 
     nav {
-    background-color: #1f1f22;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+        background: rgba(30, 27, 75, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(167, 139, 250, 0.2);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     nav a {
-    color: white;
-    font-weight: bold;
-    font-size: 1.5rem;
+        color: #a78bfa;
+        font-weight: 700;
+        font-size: 1.5rem;
     }
 
     .ask-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    background-color: #1c1c1f;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        max-width: 900px;
+        margin: 2rem auto;
+        background: rgba(51, 65, 85, 0.6);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #a78bfa;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        padding: 0.5rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+        color: #c4b5fd;
+        transform: translateX(-2px);
     }
 
     h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #e5e7eb;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #f1f5f9;
+        font-weight: 700;
     }
 
     .form-group {
-    margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
     }
 
     label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        color: #f1f5f9;
+        font-size: 1.1rem;
     }
 
     input,
     textarea {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #2a2a2e;
-    border: 1px solid #3f3f46;
-    border-radius: 6px;
-    color: #f3f4f6;
+        width: 100%;
+        padding: 1rem;
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        border-radius: 12px;
+        color: #e2e8f0;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
     }
 
     input:focus,
     textarea:focus {
-    outline: none;
-    border-color: #8b5cf6;
-    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.4);
+        outline: none;
+        border-color: #a78bfa;
+        box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+        background: rgba(30, 41, 59, 0.95);
     }
 
     textarea {
-    min-height: 150px;
+        min-height: 180px;
+        resize: vertical;
     }
 
     .btn {
-    padding: 0.75rem 1.5rem;
-    background-color: #8b5cf6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.2s ease;
+        padding: 1rem 2rem;
+        background: #a78bfa;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
     }
 
     .btn:hover {
-    background-color: #7c3aed;
+        background: #8b5cf6;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4);
+    }
+
+    .btn:active {
+        transform: translateY(0);
     }
 
     .btn-secondary {
-    background-color: #374151;
+        background: rgba(71, 85, 105, 0.8);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .btn-secondary:hover {
-    background-color: #4b5563;
+        background: rgba(71, 85, 105, 0.9);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     }
 
     .char-count {
-    font-size: 0.85rem;
-    color: #9ca3af;
-    text-align: right;
-    margin-top: 0.25rem;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        text-align: right;
+        margin-top: 0.5rem;
+        font-weight: 500;
     }
 
     .tags-input {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid #3f3f46;
-    border-radius: 6px;
-    background-color: #2a2a2e;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        border-radius: 12px;
+        background: rgba(30, 41, 59, 0.8);
+        min-height: 60px;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .tags-input:focus-within {
+        border-color: #a78bfa;
+        box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
     }
 
     .tag {
-    background-color: #312e81;
-    color: #c7d2fe;
-    padding: 0.3rem 0.6rem;
-    border-radius: 9999px;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
+        background: #a78bfa;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 2px 8px rgba(167, 139, 250, 0.3);
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .tag:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(167, 139, 250, 0.4);
     }
 
     .tag-remove {
-    margin-left: 0.5rem;
-    cursor: pointer;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .tag-remove:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+
+    .tag-input {
+        border: none !important;
+        background: transparent !important;
+        padding: 0.5rem !important;
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .tag-input:focus {
+        box-shadow: none !important;
     }
 
     .guidelines {
-    background-color: #292524;
-    padding: 1rem;
-    border-left: 4px solid #f59e0b;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    color: #fde68a;
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-left: 4px solid #f59e0b;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
     }
 
     .guidelines h4 {
-    margin: 0 0 0.5rem 0;
+        margin: 0 0 1rem 0;
+        color: #fbbf24;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .guidelines ul {
+        margin: 0;
+        padding-left: 1.5rem;
+        color: #fde68a;
+    }
+
+    .guidelines li {
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+    }
+
+    .button-group {
+        margin-top: 2.5rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .help-text {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        margin-top: 0.5rem;
+        line-height: 1.4;
+    }
+
+    #userNav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .ask-container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+        }
+        
+        .button-group {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
     }
 </style>
 </head>
@@ -158,45 +295,45 @@
 </nav>
 
 <div class="ask-container">
-    <a href="questions.html">&larr; Back to Questions</a>
+    <a href="questions.html" class="back-link">&larr; Back to Questions</a>
     <h1>Ask a Question</h1>
 
     <div class="guidelines">
-    <h4>Writing a good question</h4>
-    <ul>
-        <li>Be specific and clear</li>
-        <li>Explain the issue thoroughly</li>
-        <li>Share code, errors, or examples</li>
-        <li>Add relevant tags</li>
-        <li>Search before posting</li>
-    </ul>
+        <h4>Writing a good question</h4>
+        <ul>
+            <li>Be specific and clear</li>
+            <li>Explain the issue thoroughly</li>
+            <li>Share code, errors, or examples</li>
+            <li>Add relevant tags</li>
+            <li>Search before posting</li>
+        </ul>
     </div>
 
     <form>
-    <div class="form-group">
-        <label for="title">Question Title *</label>
-        <input type="text" id="title" maxlength="200" placeholder="What do you want to ask?" />
-        <div class="char-count"><span id="titleCount">0</span>/200 characters</div>
-    </div>
-
-    <div class="form-group">
-        <label for="content">Question Details *</label>
-        <textarea id="content" maxlength="5000" placeholder="Describe your problem in detail..."></textarea>
-        <div class="char-count"><span id="contentCount">0</span>/5000 characters</div>
-    </div>
-
-    <div class="form-group">
-        <label for="tags">Tags</label>
-        <div class="tags-input" id="tagsContainer">
-        <input id="tagInput" class="tag-input" placeholder="Add tags..." />
+        <div class="form-group">
+            <label for="title">Question Title *</label>
+            <input type="text" id="title" maxlength="200" placeholder="What do you want to ask?" />
+            <div class="char-count"><span id="titleCount">0</span>/200 characters</div>
         </div>
-        <small style="color: #9ca3af; display: block; margin-top: 0.5rem;">Max 5 tags (e.g., html, javascript)</small>
-    </div>
 
-    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-        <button type="submit" class="btn">Post Question</button>
-        <button type="button" class="btn btn-secondary">Cancel</button>
-    </div>
+        <div class="form-group">
+            <label for="content">Question Details *</label>
+            <textarea id="content" maxlength="5000" placeholder="Describe your problem in detail..."></textarea>
+            <div class="char-count"><span id="contentCount">0</span>/5000 characters</div>
+        </div>
+
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <div class="tags-input" id="tagsContainer">
+                <input id="tagInput" class="tag-input" placeholder="Add tags..." />
+            </div>
+            <div class="help-text">Max 5 tags (e.g., html, javascript)</div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn">Post Question</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+        </div>
     </form>
 </div>
 
@@ -207,11 +344,11 @@
     const contentCount = document.getElementById('contentCount');
 
     titleInput.addEventListener('input', () => {
-    titleCount.textContent = titleInput.value.length;
+        titleCount.textContent = titleInput.value.length;
     });
 
     contentInput.addEventListener('input', () => {
-    contentCount.textContent = contentInput.value.length;
+        contentCount.textContent = contentInput.value.length;
     });
 
     const tags = [];
@@ -219,32 +356,32 @@
     const tagsContainer = document.getElementById('tagsContainer');
 
     tagInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        const tag = tagInput.value.trim().toLowerCase();
-        if (tag && !tags.includes(tag) && tags.length < 5) {
-        tags.push(tag);
-        renderTags();
-        tagInput.value = '';
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const tag = tagInput.value.trim().toLowerCase();
+            if (tag && !tags.includes(tag) && tags.length < 5) {
+                tags.push(tag);
+                renderTags();
+                tagInput.value = '';
+            }
         }
-    }
     });
 
     function renderTags() {
-    const existing = tagsContainer.querySelectorAll('.tag');
-    existing.forEach(e => e.remove());
-    tags.forEach(tag => {
-        const tagEl = document.createElement('span');
-        tagEl.className = 'tag';
-        tagEl.innerHTML = `${tag}<span class="tag-remove" onclick="removeTag('${tag}')">&times;</span>`;
-        tagsContainer.insertBefore(tagEl, tagInput);
-    });
+        const existing = tagsContainer.querySelectorAll('.tag');
+        existing.forEach(e => e.remove());
+        tags.forEach(tag => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'tag';
+            tagEl.innerHTML = `${tag}<span class="tag-remove" onclick="removeTag('${tag}')">&times;</span>`;
+            tagsContainer.insertBefore(tagEl, tagInput);
+        });
     }
 
     window.removeTag = (tagToRemove) => {
-    const index = tags.indexOf(tagToRemove);
-    if (index > -1) tags.splice(index, 1);
-    renderTags();
+        const index = tags.indexOf(tagToRemove);
+        if (index > -1) tags.splice(index, 1);
+        renderTags();
     };
 </script>
 </body>
