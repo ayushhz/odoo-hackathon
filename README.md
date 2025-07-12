@@ -1,6 +1,7 @@
 # odoo-hackathon
 
 Problem Statement: StackIt – A Minimal Q&A Forum Platform
+
 Team Members:
 1. Ayush Kumar - offayush21@gmail.com
 2. Akshit Chaudhary - akshit05chaudhary@gmail.com
