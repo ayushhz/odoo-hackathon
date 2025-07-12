@@ -1,398 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - StackIt</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .signup-container {
-            max-width: 450px;
-            margin: 100px auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 0.75rem;
-            background: #6366f1;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-bottom: 1rem;
-        }
-        
-        .btn:hover {
-            background: #5147eb;
-        }
-        
-        .btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
-        
-        .error-message {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 0.75rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-        
-        .success-message {
-            background: #d1fae5;
-            color: #059669;
-            padding: 0.75rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-        
-        .back-link {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            color: #6366f1;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-        
-        .login-link a {
-            color: #6366f1;
-            text-decoration: none;
-        }
-        
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-        
-        .password-requirements {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-top: 0.5rem;
-        }
-        
-        .requirement {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.25rem;
-        }
-        
-        .requirement.valid {
-            color: #059669;
-        }
-        
-        .requirement.invalid {
-            color: #dc2626;
-        }
-        
-        .requirement-icon {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-        
-        .requirement.valid .requirement-icon {
-            background: #d1fae5;
-            color: #059669;
-        }
-        
-        .requirement.invalid .requirement-icon {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - StackIt</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f0f0f;
+      color: #e5e7eb;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .signup-container {
+      max-width: 450px;
+      margin: 100px auto;
+      padding: 2rem;
+      background: #1f1f1f;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .signup-container h2 {
+      text-align: center;
+      color: #ffffff;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #d1d5db;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      background-color: #111827;
+      color: #f9fafb;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .btn:hover {
+      background: #4f46e5;
+    }
+
+    .btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .error-message,
+    .success-message {
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .error-message {
+      background: #7f1d1d;
+      color: #fee2e2;
+    }
+
+    .success-message {
+      background: #064e3b;
+      color: #d1fae5;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .login-link a {
+      color: #6366f1;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .password-requirements {
+      font-size: 0.875rem;
+      color: #9ca3af;
+      margin-top: 0.5rem;
+    }
+
+    .requirement {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .requirement-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .requirement.valid {
+      color: #059669;
+    }
+
+    .requirement.valid .requirement-icon {
+      background: #d1fae5;
+      color: #059669;
+    }
+
+    .requirement.invalid {
+      color: #dc2626;
+    }
+
+    .requirement.invalid .requirement-icon {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+  </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Back to Home</a>
-    
-    <div class="signup-container">
-        <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Create Account</h2>
-        
-        <div id="errorMessage" class="error-message"></div>
-        <div id="successMessage" class="success-message"></div>
-        
-        <form id="signupForm">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="Choose a username">
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required placeholder="your@email.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Create a strong password">
-                <div class="password-requirements">
-                    <div class="requirement" id="lengthReq">
-                        <span class="requirement-icon">✗</span>
-                        At least 6 characters
-                    </div>
-                    <div class="requirement" id="letterReq">
-                        <span class="requirement-icon">✗</span>
-                        Contains letters
-                    </div>
-                    <div class="requirement" id="numberReq">
-                        <span class="requirement-icon">✗</span>
-                        Contains numbers
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repeat your password">
-            </div>
-            
-            <button type="submit" class="btn" id="signupBtn">
-                <span id="signupBtnText">Create Account</span>
-                <span id="signupSpinner" style="display: none;">Creating Account...</span>
-            </button>
-        </form>
-        
-        <div class="login-link">
-            Already have an account? <a href="login-modern.html">Sign in here</a>
-        </div>
-    </div>
+  <a href="index.html" class="back-link">← Back to Home</a>
 
-    <script type="module">
-        import { authService } from './firebase-modern.js';
-        
-        // DOM elements
-        const signupForm = document.getElementById('signupForm');
-        const usernameInput = document.getElementById('username');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const signupBtn = document.getElementById('signupBtn');
-        const signupBtnText = document.getElementById('signupBtnText');
-        const signupSpinner = document.getElementById('signupSpinner');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-        
-        // Password requirement elements
-        const lengthReq = document.getElementById('lengthReq');
-        const letterReq = document.getElementById('letterReq');
-        const numberReq = document.getElementById('numberReq');
-        
-        // Utility functions
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            successMessage.style.display = 'none';
-        }
-        
-        function showSuccess(message) {
-            successMessage.textContent = message;
-            successMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-        }
-        
-        function hideMessages() {
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
-        }
-        
-        function setLoading(isLoading) {
-            if (isLoading) {
-                signupBtn.disabled = true;
-                signupBtnText.style.display = 'none';
-                signupSpinner.style.display = 'inline';
-            } else {
-                signupBtn.disabled = false;
-                signupBtnText.style.display = 'inline';
-                signupSpinner.style.display = 'none';
-            }
-        }
-        
-        // Password validation
-        function validatePassword(password) {
-            const requirements = {
-                length: password.length >= 6,
-                letter: /[a-zA-Z]/.test(password),
-                number: /\d/.test(password)
-            };
-            
-            // Update UI
-            updateRequirement(lengthReq, requirements.length);
-            updateRequirement(letterReq, requirements.letter);
-            updateRequirement(numberReq, requirements.number);
-            
-            return Object.values(requirements).every(req => req);
-        }
-        
-        function updateRequirement(element, isValid) {
-            const icon = element.querySelector('.requirement-icon');
-            if (isValid) {
-                element.classList.add('valid');
-                element.classList.remove('invalid');
-                icon.textContent = '✓';
-            } else {
-                element.classList.add('invalid');
-                element.classList.remove('valid');
-                icon.textContent = '✗';
-            }
-        }
-        
-        // Real-time password validation
-        passwordInput.addEventListener('input', () => {
-            validatePassword(passwordInput.value);
+  <div class="signup-container">
+    <h2>Create Account</h2>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div id="successMessage" class="success-message"></div>
+
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required placeholder="Choose a username" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="your@email.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Create a strong password" />
+        <div class="password-requirements">
+          <div class="requirement" id="lengthReq">
+            <span class="requirement-icon">✗</span>
+            At least 6 characters
+          </div>
+          <div class="requirement" id="letterReq">
+            <span class="requirement-icon">✗</span>
+            Contains letters
+          </div>
+          <div class="requirement" id="numberReq">
+            <span class="requirement-icon">✗</span>
+            Contains numbers
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repeat your password" />
+      </div>
+
+      <button type="submit" class="btn" id="signupBtn">
+        <span id="signupBtnText">Create Account</span>
+        <span id="signupSpinner" style="display: none;">Creating Account...</span>
+      </button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a href="login-modern.html">Sign in here</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { authService } from './firebase-modern.js';
+
+    const signupForm = document.getElementById('signupForm');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const signupBtn = document.getElementById('signupBtn');
+    const signupBtnText = document.getElementById('signupBtnText');
+    const signupSpinner = document.getElementById('signupSpinner');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    const lengthReq = document.getElementById('lengthReq');
+    const letterReq = document.getElementById('letterReq');
+    const numberReq = document.getElementById('numberReq');
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      errorMessage.style.display = 'none';
+    }
+
+    function hideMessages() {
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+    }
+
+    function setLoading(isLoading) {
+      signupBtn.disabled = isLoading;
+      signupBtnText.style.display = isLoading ? 'none' : 'inline';
+      signupSpinner.style.display = isLoading ? 'inline' : 'none';
+    }
+
+    function validatePassword(password) {
+      const requirements = {
+        length: password.length >= 6,
+        letter: /[a-zA-Z]/.test(password),
+        number: /\d/.test(password)
+      };
+
+      updateRequirement(lengthReq, requirements.length);
+      updateRequirement(letterReq, requirements.letter);
+      updateRequirement(numberReq, requirements.number);
+
+      return Object.values(requirements).every(Boolean);
+    }
+
+    function updateRequirement(element, isValid) {
+      const icon = element.querySelector('.requirement-icon');
+      if (isValid) {
+        element.classList.add('valid');
+        element.classList.remove('invalid');
+        icon.textContent = '✓';
+      } else {
+        element.classList.add('invalid');
+        element.classList.remove('valid');
+        icon.textContent = '✗';
+      }
+    }
+
+    passwordInput.addEventListener('input', () => {
+      validatePassword(passwordInput.value);
+    });
+
+    function validateForm() {
+      const username = usernameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (!username || username.length < 3) {
+        showError('Username must be at least 3 characters');
+        return false;
+      }
+
+      if (!email || !email.includes('@')) {
+        showError('Please enter a valid email');
+        return false;
+      }
+
+      if (!password || !validatePassword(password)) {
+        showError('Password does not meet requirements');
+        return false;
+      }
+
+      if (password !== confirmPassword) {
+        showError('Passwords do not match');
+        return false;
+      }
+
+      return true;
+    }
+
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideMessages();
+
+      if (!validateForm()) return;
+
+      setLoading(true);
+
+      try {
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        const result = await authService.registerUser(email, password, {
+          username,
+          displayName: username
         });
-        
-        // Form validation
-        function validateForm() {
-            const username = usernameInput.value.trim();
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-            
-            if (!username) {
-                showError('Please enter a username');
-                return false;
-            }
-            
-            if (username.length < 3) {
-                showError('Username must be at least 3 characters long');
-                return false;
-            }
-            
-            if (!email) {
-                showError('Please enter your email address');
-                return false;
-            }
-            
-            if (!email.includes('@')) {
-                showError('Please enter a valid email address');
-                return false;
-            }
-            
-            if (!password) {
-                showError('Please enter a password');
-                return false;
-            }
-            
-            if (!validatePassword(password)) {
-                showError('Password does not meet requirements');
-                return false;
-            }
-            
-            if (!confirmPassword) {
-                showError('Please confirm your password');
-                return false;
-            }
-            
-            if (password !== confirmPassword) {
-                showError('Passwords do not match');
-                return false;
-            }
-            
-            return true;
+
+        if (result.success) {
+          showSuccess('Account created! Redirecting...');
+          signupForm.reset();
+          setTimeout(() => (window.location.href = 'questions.html'), 2000);
+        } else {
+          showError(result.error || 'Signup failed. Try again.');
         }
-        
-        // Handle form submission
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            hideMessages();
-            
-            if (!validateForm()) {
-                return;
-            }
-            
-            setLoading(true);
-            
-            try {
-                const username = usernameInput.value.trim();
-                const email = emailInput.value.trim();
-                const password = passwordInput.value;
-                
-                const result = await authService.registerUser(email, password, {
-                    username: username,
-                    displayName: username
-                });
-                
-                if (result.success) {
-                    showSuccess('Account created successfully! Redirecting...');
-                    
-                    // Clear form
-                    signupForm.reset();
-                    
-                    // Redirect to questions page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = 'questions.html';
-                    }, 2000);
-                } else {
-                    showError(result.error || 'Failed to create account. Please try again.');
-                }
-            } catch (error) {
-                console.error('Signup error:', error);
-                showError('An unexpected error occurred. Please try again.');
-            } finally {
-                setLoading(false);
-            }
-        });
-        
-        // Check if user is already logged in
-        authService.onAuthStateChange((user) => {
-            if (user) {
-                // User is already signed in, redirect to questions page
-                console.log('User already logged in:', user.email);
-                window.location.href = 'questions.html';
-            }
-        });
-        
-        // Auto-focus username input
-        usernameInput.focus();
-    </script>
+      } catch (error) {
+        console.error('Signup error:', error);
+        showError('An unexpected error occurred.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    authService.onAuthStateChange((user) => {
+      if (user) {
+        window.location.href = 'questions.html';
+      }
+    });
+
+    usernameInput.focus();
+  </script>
 </body>
 </html>
