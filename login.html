@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StackIt - A Minimal Q&A Forum Platform</title>
+    <title>Login - StackIt</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -12,13 +12,12 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <h2>StackIt</h2>
+                <a href="index.html"><h2>StackIt</h2></a>
             </div>
             <div class="nav-menu">
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#about" class="nav-link">About</a>
-                <button class="btn btn-outline">Login</button>
-                <button class="btn btn-primary">Sign Up</button>
+                <a href="index.html#features" class="nav-link">Features</a>
+                <a href="index.html#about" class="nav-link">About</a>
+                <a href="signup.html" class="btn btn-outline">Sign Up</a>
             </div>
             <div class="hamburger">
                 <span></span>
@@ -28,237 +27,74 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    A Minimal Q&A Forum Platform for 
-                    <span class="gradient-text">Collaborative Learning</span>
-                </h1>
-                <p class="hero-description">
-                    StackIt supports structured knowledge sharing in a simple, user-friendly environment. 
-                    Ask questions, share knowledge, and build a community focused on learning.
-                </p>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary btn-large">Get Started</button>
-                    <button class="btn btn-outline btn-large">Ask New Question</button>
+    <!-- Login Section -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Welcome Back</h1>
+                    <p>Sign in to your StackIt account</p>
                 </div>
-            </div>
-            <div class="hero-visual">
-                <div class="forum-preview">
-                    <div class="forum-header">
-                        <div class="forum-logo">StackIt</div>
-                        <div class="forum-login">Login</div>
+                
+                <form class="auth-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
-                    <div class="forum-toolbar">
-                        <div class="ask-btn">Ask New question</div>
-                        <div class="search-bar">
-                            <input type="text" placeholder="Search">
-                        </div>
-                    </div>
-                    <div class="question-item">
-                        <div class="question-content">
-                            <h4>How to join 2 columns in a data set to make a separate column in SQL</h4>
-                            <div class="question-meta">
-                                <span class="user-badge vital-elephant">Vital Elephant</span>
-                                <span class="answer-count">5 ans</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="question-item">
-                        <div class="question-content">
-                            <h4>Question.....</h4>
-                            <div class="question-meta">
-                                <span class="user-badge delightful-boar">Delightful Boar</span>
-                                <span class="answer-count">3 ans</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Core Features</h2>
-                <p class="section-description">Everything you need for a thriving Q&A community</p>
-            </div>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8.5 12.5L10.5 14.5L15.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Ask Questions</h3>
-                    <p>Submit new questions with rich text formatting, relevant tags, and detailed descriptions to get the help you need.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Rich Text Editor</h3>
-                    <p>Format your questions and answers with bold, italic, lists, links, images, and more using our intuitive editor.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 10V12H8V10H7ZM8 10H9V8H8V10ZM8 12V14H9V12H8Z" fill="currentColor"/>
-                            <path d="M12 6L13 7H20C20.5523 7 21 7.44772 21 8V18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18V6C3 5.44772 3.44772 5 4 5H11L12 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Voting System</h3>
-                    <p>Upvote helpful answers and downvote low-quality content. Question owners can mark the best answer as accepted.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8C18 6.17 16.83 5 15 5H9C7.17 5 6 6.17 6 8C6 9.83 7.17 11 9 11H15C16.83 11 18 9.83 18 8ZM16 8C16 8.55 15.55 9 15 9H9C8.45 9 8 8.55 8 8C8 7.45 8.45 7 9 7H15C15.55 7 16 7.45 16 8Z" fill="currentColor"/>
-                            <path d="M6 15C6 13.17 7.17 12 9 12H15C16.83 12 18 13.17 18 15C18 16.83 16.83 18 15 18H9C7.17 18 6 16.83 6 15ZM8 15C8 15.55 8.45 16 9 16H15C15.55 16 16 15.55 16 15C16 14.45 15.55 14 15 14H9C8.45 14 8 14.45 8 15Z" fill="currentColor"/>
-                        </svg>
-                    </div>
-                    <h3>Smart Tagging</h3>
-                    <p>Organize questions with relevant tags like React, JavaScript, or Python for easy discovery and filtering.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 8C20.209 8 22 6.209 22 4C22 1.791 20.209 0 18 0C15.791 0 14 1.791 14 4C14 6.209 15.791 8 18 8Z" fill="currentColor"/>
-                            <path d="M6 15L1 20L4 22L6 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M13 3L15.5 10.5L22 13L15.5 15.5L13 23L10.5 15.5L4 13L10.5 10.5L13 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>Notifications</h3>
-                    <p>Stay updated when someone answers your question, comments on your posts, or mentions you in discussions.</p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M17 11L19 13L23 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3>User Roles</h3>
-                    <p>Flexible permission system with Guest, User, and Admin roles to maintain community standards and moderation.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Built for Collaborative Learning</h2>
-                    <p>StackIt is designed to be simple, user-friendly, and focused on the core experience of asking and answering questions within a community. Whether you're a beginner seeking help or an expert sharing knowledge, our platform provides the tools you need.</p>
                     
-                    <div class="user-roles">
-                        <h3>User Roles & Permissions</h3>
-                        <div class="roles-table">
-                            <div class="role-row">
-                                <div class="role-name">Guest</div>
-                                <div class="role-permissions">View all questions and answers</div>
-                            </div>
-                            <div class="role-row">
-                                <div class="role-name">User</div>
-                                <div class="role-permissions">Register, log in, post questions/answers, vote</div>
-                            </div>
-                            <div class="role-row">
-                                <div class="role-name">Admin</div>
-                                <div class="role-permissions">Moderate content</div>
-                            </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                        <div class="password-toggle" onclick="togglePassword('password')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                         </div>
                     </div>
-                </div>
-                <div class="about-visual">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">100+</div>
-                            <div class="stat-label">Questions Asked</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">300+</div>
-                            <div class="stat-label">Answers Posted</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">50+</div>
-                            <div class="stat-label">Active Users</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">25+</div>
-                            <div class="stat-label">Topics Covered</div>
-                        </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
                     </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                </form>
+                
+                <div class="auth-divider">
+                    <span>or</span>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Start Learning?</h2>
-                <p>Join our community and start asking questions, sharing knowledge, and collaborating with others.</p>
-                <div class="cta-buttons">
-                    <button class="btn btn-primary btn-large">Create Account</button>
-                    <button class="btn btn-outline btn-large">Browse Questions</button>
+                
+                <div class="social-login">
+                    <button class="btn btn-social btn-google">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                    <button class="btn btn-social btn-github">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" fill="currentColor"/>
+                        </svg>
+                        Continue with GitHub
+                    </button>
+                </div>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="signup.html">Sign up</a></p>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h3>StackIt</h3>
-                    <p>A minimal Q&A forum platform for collaborative learning and structured knowledge sharing.</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Platform</h4>
-                        <a href="#">Features</a>
-                        <a href="#">About</a>
-                        <a href="#">Community</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Support</h4>
-                        <a href="#">Help Center</a>
-                        <a href="#">Contact</a>
-                        <a href="#">Guidelines</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <a href="#">Privacy</a>
-                        <a href="#">Terms</a>
-                        <a href="#">Cookies</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 StackIt. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>
